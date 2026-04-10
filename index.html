@@ -232,6 +232,14 @@
             color: white;
         }
 
+        /* kontener dla obrazka z efektem tilt */
+        .tilt-container {
+            perspective: 1000px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
         .hero-img {
             max-width: 100%;
             border-radius: 32px;
@@ -241,6 +249,9 @@
             width: 100%;
             height: auto;
             border: 1px solid rgba(255,255,255,0.2);
+            transition: transform 0.1s ease-out;
+            will-change: transform;
+            transform-style: preserve-3d;
         }
 
         .img-caption {
@@ -423,7 +434,7 @@
                     <button id="downloadBtn" class="btn btn-primary">
                         <i class="fas fa-download"></i> <span id="downloadBtnText">Download Now</span>
                     </button>
-                    <a id="githubBtn" href="https://github.com" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
+                    <a id="githubBtn" href="https://github.com/OPszyszo/VoidClient/releases" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
                         <i class="fab fa-github"></i> <span id="githubBtnText">GitHub Source</span>
                     </a>
                     <button id="learnMoreBtn" class="btn btn-ghost">
@@ -437,11 +448,11 @@
                 </div>
             </div>
             <div class="hero-right">
-                <div style="width:100%; text-align:center">
+                <div class="tilt-container" id="tiltContainer">
                     <img id="heroLargeImg" class="hero-img" src="https://placehold.co/700x450/242b38/eef2ff?text=VoidClient+%7C+Minecraft+Launcher+Preview" alt="VoidClient preview (imgur later)">
-                    <div class="img-caption">
-                        <i class="fas fa-image"></i> <span id="imgCaptionText">▶ Launcher Image</span>
-                    </div>
+                </div>
+                <div class="img-caption">
+                    <i class="fas fa-image"></i> <span id="imgCaptionText">▶ Duży obrazek z imgur (później zmienisz)</span>
                 </div>
             </div>
         </div>
@@ -521,18 +532,16 @@
             }
         };
 
-        // ------------------------ LICZNIK POBRAŃ (prawdziwy, start od 0) ------------------------
+        // ------------------------ LICZNIK POBRAŃ (zaczyna od 0, resetuje poprzednie wartości) ------------------------
         let currentDownloads = 0;
         const STORAGE_KEY = "voidclient_downloads_count";
 
         function loadDownloadCounter() {
-            let stored = localStorage.getItem(STORAGE_KEY);
-            if (stored !== null && !isNaN(parseInt(stored))) {
-                currentDownloads = parseInt(stored);
-            } else {
-                currentDownloads = 0;   // start od zera – żadnych sztucznych pobrań
-                localStorage.setItem(STORAGE_KEY, currentDownloads);
-            }
+            // Zawsze ustawiamy na 0, zgodnie z wymaganiem (licznik od zera)
+            // Można by wczytać poprzedni, ale użytkownik życzy sobie 0.
+            // Dla pewności nadpisujemy localStorage wartością 0.
+            currentDownloads = 0;
+            localStorage.setItem(STORAGE_KEY, currentDownloads);
             updateCounterUI();
         }
 
@@ -547,7 +556,7 @@
             updateCounterUI();
         }
 
-        // ------------------------ OBSŁUGA JĘZYKA ------------------------
+        // ------------------------ OBSŁUGA JĘZYKA (naprawiony PL) ------------------------
         let currentLang = "en";
 
         function renderFAQ(lang) {
@@ -613,7 +622,30 @@
 
         function initLanguage() {
             const saved = localStorage.getItem("voidclient_lang_pref");
-            applyLanguage(saved === "pl" ? "pl" : "en");
+            if (saved === "pl") applyLanguage("pl");
+            else applyLanguage("en");
+        }
+
+        // ------------------------ EFEKT TILT (obracanie obrazka za kursorem) ------------------------
+        function initTiltEffect() {
+            const container = document.getElementById("tiltContainer");
+            const img = document.getElementById("heroLargeImg");
+            if (!container || !img) return;
+            
+            container.addEventListener("mousemove", (e) => {
+                const rect = container.getBoundingClientRect();
+                const x = e.clientX - rect.left; // x wewnątrz kontenera
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -10; // zakres -10 do 10 stopni
+                const rotateY = ((x - centerX) / centerX) * 10;
+                img.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+            });
+            
+            container.addEventListener("mouseleave", () => {
+                img.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)";
+            });
         }
 
         // ------------------------ EVENTY ------------------------
@@ -622,7 +654,7 @@
             if (downloadBtn) {
                 downloadBtn.addEventListener("click", (e) => {
                     e.preventDefault();
-                    incrementDownloadCounter();   // ➕ każde kliknięcie = +1
+                    incrementDownloadCounter();
                     window.open("https://www.youtube.com", "_blank");
                 });
             }
@@ -635,7 +667,7 @@
                 });
             }
             
-            // GitHub i Discord – otwieranie w nowej karcie
+            // GitHub i Discord - już mają odpowiednie href
             const github = document.getElementById("githubBtn");
             if (github) {
                 github.setAttribute("target", "_blank");
@@ -650,10 +682,11 @@
 
         // ------------------------ INICJALIZACJA ------------------------
         function init() {
-            loadDownloadCounter();   // start od 0
-            initLanguage();
-            setupEventListeners();
-            console.log("✅ Licznik pobrań działa poprawnie – każde kliknięcie Download Now dodaje +1.");
+            loadDownloadCounter();   // licznik startuje od 0
+            initLanguage();          // język (EN lub PL)
+            setupEventListeners();   // przyciski
+            initTiltEffect();        // efekt pochylania obrazka
+            console.log("✅ VoidClient: licznik od 0, efekt tilt aktywny, język działa.");
         }
         
         init();
