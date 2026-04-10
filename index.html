@@ -16,7 +16,6 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            /* gradient: szary u góry -> czarny u dołu */
             background: linear-gradient(145deg, #3a3f4b 0%, #0a0c10 100%);
             min-height: 100vh;
             color: #f0f3f8;
@@ -29,7 +28,6 @@
             padding: 2rem 2rem 3rem;
         }
 
-        /* nagłówek */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -98,7 +96,6 @@
             background: rgba(255,255,255,0.15);
         }
 
-        /* hero */
         .hero {
             display: flex;
             flex-wrap: wrap;
@@ -232,7 +229,6 @@
             color: white;
         }
 
-        /* kontener dla obrazka z efektem tilt */
         .tilt-container {
             perspective: 1000px;
             width: 100%;
@@ -267,7 +263,6 @@
             margin-right: auto;
         }
 
-        /* sekcja Discord + FAQ */
         .extra-section {
             margin: 4rem 0 2rem;
             background: rgba(10, 12, 18, 0.6);
@@ -407,7 +402,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- nagłówek -->
         <div class="navbar">
             <div class="logo-area">
                 <img id="siteLogo" class="logo-img" src="https://i.imgur.com/ieaAZyE.jpeg" alt="VoidClient Logo">
@@ -419,7 +413,6 @@
             </div>
         </div>
 
-        <!-- hero -->
         <div class="hero">
             <div class="hero-left">
                 <div class="badge" id="versionBadge">
@@ -449,7 +442,7 @@
             </div>
             <div class="hero-right">
                 <div class="tilt-container" id="tiltContainer">
-                    <img id="heroLargeImg" class="hero-img" src="https://i.imgur.com/OvQccxi.png" alt="VoidClient preview (imgur later)">
+                    <img id="heroLargeImg" class="hero-img" src="https://i.imgur.com/OvQccxi.png" alt="VoidClient preview">
                 </div>
                 <div class="img-caption">
                     <i class="fas fa-image"></i> <span id="imgCaptionText">▶ Launcher in Beta 2026.4</span>
@@ -457,7 +450,6 @@
             </div>
         </div>
 
-        <!-- Discord + FAQ -->
         <div class="extra-section">
             <div class="discord-row">
                 <div class="discord-info">
@@ -494,7 +486,7 @@
                 githubBtnText: "GitHub Source",
                 learnMoreText: "Learn more",
                 downloadsLabel: "Downloads:",
-                imgCaptionText: "▶ Image from 2026.1",
+                imgCaptionText: "▶ Launcher in Beta 2026.4",
                 footerNoteText: "Open source & blazing fast",
                 learnMoreAlert: "📌 More about VoidClient: ultra-fast updates, mod support, full control.",
                 discordTitle: "Join our Community",
@@ -516,7 +508,7 @@
                 githubBtnText: "Źródło GitHub",
                 learnMoreText: "Dowiedz się więcej",
                 downloadsLabel: "Pobrania:",
-                imgCaptionText: "▶ Obraz launchera z wersji 2026.1",
+                imgCaptionText: "▶ Launcher w wersji Beta 2026.4",
                 footerNoteText: "Open source i błyskawiczna wydajność",
                 learnMoreAlert: "📌 Więcej o VoidClient: błyskawiczne aktualizacje, wsparcie dla modów, pełna kontrola.",
                 discordTitle: "Dołącz do społeczności",
@@ -532,16 +524,18 @@
             }
         };
 
-        // ------------------------ LICZNIK POBRAŃ (zaczyna od 0, resetuje poprzednie wartości) ------------------------
+        // ------------------------ LICZNIK POBRAŃ (zapamiętuje) ------------------------
         let currentDownloads = 0;
         const STORAGE_KEY = "voidclient_downloads_count";
 
         function loadDownloadCounter() {
-            // Zawsze ustawiamy na 0, zgodnie z wymaganiem (licznik od zera)
-            // Można by wczytać poprzedni, ale użytkownik życzy sobie 0.
-            // Dla pewności nadpisujemy localStorage wartością 0.
-            currentDownloads = 0;
-            localStorage.setItem(STORAGE_KEY, currentDownloads);
+            let stored = localStorage.getItem(STORAGE_KEY);
+            if (stored !== null && !isNaN(parseInt(stored))) {
+                currentDownloads = parseInt(stored);
+            } else {
+                currentDownloads = 0;
+                localStorage.setItem(STORAGE_KEY, currentDownloads);
+            }
             updateCounterUI();
         }
 
@@ -556,7 +550,7 @@
             updateCounterUI();
         }
 
-        // ------------------------ OBSŁUGA JĘZYKA (naprawiony PL) ------------------------
+        // ------------------------ OBSŁUGA JĘZYKA ------------------------
         let currentLang = "en";
 
         function renderFAQ(lang) {
@@ -626,7 +620,7 @@
             else applyLanguage("en");
         }
 
-        // ------------------------ EFEKT TILT (obracanie obrazka za kursorem) ------------------------
+        // ------------------------ EFEKT TILT ------------------------
         function initTiltEffect() {
             const container = document.getElementById("tiltContainer");
             const img = document.getElementById("heroLargeImg");
@@ -634,11 +628,11 @@
             
             container.addEventListener("mousemove", (e) => {
                 const rect = container.getBoundingClientRect();
-                const x = e.clientX - rect.left; // x wewnątrz kontenera
+                const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
-                const rotateX = ((y - centerY) / centerY) * -10; // zakres -10 do 10 stopni
+                const rotateX = ((y - centerY) / centerY) * -10;
                 const rotateY = ((x - centerX) / centerX) * 10;
                 img.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
             });
@@ -655,6 +649,7 @@
                 downloadBtn.addEventListener("click", (e) => {
                     e.preventDefault();
                     incrementDownloadCounter();
+                    // Twój bezpośredni link do pliku Void-Setup.exe
                     window.open("https://download1523.mediafire.com/0jd6swy5ysagjmHzOjfNKbplWILXwy64s5KEilMWmIlobmlKtKHPguyGMbS7ashH29tuLYo8aWQ9ID6M1ZTCrB7ARED5ZFYMW0mk_tFB8LOA5syE5-eL7a5WyHRWA4o6Ryg1RixJEB5-oV3BYqAIZCRioXKuNqveZtcC3NB8OZYNEAw/izym26cg6ir2nji/Void-Setup.exe", "_blank");
                 });
             }
@@ -667,7 +662,6 @@
                 });
             }
             
-            // GitHub i Discord - już mają odpowiednie href
             const github = document.getElementById("githubBtn");
             if (github) {
                 github.setAttribute("target", "_blank");
@@ -682,11 +676,11 @@
 
         // ------------------------ INICJALIZACJA ------------------------
         function init() {
-            loadDownloadCounter();   // licznik startuje od 0
-            initLanguage();          // język (EN lub PL)
-            setupEventListeners();   // przyciski
-            initTiltEffect();        // efekt pochylania obrazka
-            console.log("✅ VoidClient: licznik od 0, efekt tilt aktywny, język działa.");
+            loadDownloadCounter();   // wczytuje zapisaną liczbę (start od 0)
+            initLanguage();
+            setupEventListeners();
+            initTiltEffect();
+            console.log("✅ VoidClient: licznik zapamiętuje kliknięcia, nie zeruje się.");
         }
         
         init();
