@@ -480,7 +480,7 @@
                         <p id="discordDesc">Get support, share feedback, and play with others on Discord.</p>
                     </div>
                 </div>
-                <a id="discordLink" href="https://discord.com/invite/placeholder" target="_blank" rel="noopener noreferrer" class="btn-discord">
+                <a id="discordLink" href="https://dc.gg/voidclient" target="_blank" rel="noopener noreferrer" class="btn-discord">
                     <i class="fab fa-discord"></i> <span id="discordBtnText">Join Discord →</span>
                 </a>
             </div>
@@ -684,15 +684,12 @@
                 githubLink.setAttribute("target", "_blank");
                 githubLink.setAttribute("rel", "noopener noreferrer");
             }
-            // Discord link (placeholder, można zmienić)
+            // Discord link — teraz właściwy, bez alertu
             const discordLink = document.getElementById("discordLink");
             if (discordLink) {
-                discordLink.addEventListener("click", (e) => {
-                    if (discordLink.getAttribute("href") === "https://discord.com/invite/placeholder") {
-                        e.preventDefault();
-                        alert(currentLang === "pl" ? "Link Discord: zmień go na właściwy w kodzie (atrybut href)." : "Discord link: replace with your invite URL.");
-                    }
-                });
+                // upewniamy się, że otwiera się w nowej karcie
+                discordLink.setAttribute("target", "_blank");
+                discordLink.setAttribute("rel", "noopener noreferrer");
             }
         }
 
