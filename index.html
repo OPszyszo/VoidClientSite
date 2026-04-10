@@ -23,14 +23,13 @@
             line-height: 1.5;
         }
 
-        /* kontener główny */
         .container {
             max-width: 1300px;
             margin: 0 auto;
             padding: 2rem 2rem 3rem;
         }
 
-        /* nagłówek: logo + przyciski językowe */
+        /* nagłówek */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -54,7 +53,6 @@
             object-fit: cover;
             background: rgba(255,255,255,0.1);
             border-radius: 18px;
-            transition: transform 0.2s ease;
         }
 
         .logo-text {
@@ -100,7 +98,7 @@
             background: rgba(255,255,255,0.15);
         }
 
-        /* główny layout 2 kolumny */
+        /* hero */
         .hero {
             display: flex;
             flex-wrap: wrap;
@@ -185,7 +183,6 @@
         .btn-primary:hover {
             background: #1a2c3b;
             transform: translateY(-3px);
-            box-shadow: 0 14px 24px rgba(0,0,0,0.4);
         }
 
         .btn-outline {
@@ -235,21 +232,15 @@
             color: white;
         }
 
-        /* obrazek hero */
         .hero-img {
             max-width: 100%;
             border-radius: 32px;
             box-shadow: 0 25px 40px -12px rgba(0,0,0,0.5);
-            transition: transform 0.25s ease;
             background: #1e2430;
             object-fit: cover;
             width: 100%;
             height: auto;
             border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .hero-img:hover {
-            transform: scale(1.01);
         }
 
         .img-caption {
@@ -265,13 +256,13 @@
             margin-right: auto;
         }
 
-        /* SEKCJA DISCORD + FAQ */
+        /* sekcja Discord + FAQ */
         .extra-section {
             margin: 4rem 0 2rem;
             background: rgba(10, 12, 18, 0.6);
             backdrop-filter: blur(8px);
             border-radius: 2rem;
-            padding: 2rem 2rem 2rem;
+            padding: 2rem;
             border: 1px solid rgba(255,255,255,0.1);
         }
 
@@ -316,8 +307,8 @@
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            transition: 0.2s;
             text-decoration: none;
+            transition: 0.2s;
         }
 
         .btn-discord:hover {
@@ -325,7 +316,6 @@
             transform: scale(1.02);
         }
 
-        /* FAQ accordion */
         .faq-title {
             font-size: 1.8rem;
             font-weight: 700;
@@ -357,7 +347,6 @@
             justify-content: space-between;
             align-items: center;
             font-family: inherit;
-            transition: 0.2s;
         }
 
         .faq-question:hover {
@@ -365,7 +354,6 @@
         }
 
         .faq-question i {
-            font-size: 1.2rem;
             transition: transform 0.2s;
         }
 
@@ -398,28 +386,17 @@
         }
 
         @media (max-width: 850px) {
-            .container {
-                padding: 1.5rem;
-            }
-            h1 {
-                font-size: 2.7rem;
-            }
-            .description {
-                max-width: 100%;
-            }
-            .hero {
-                flex-direction: column-reverse;
-            }
-            .discord-row {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+            .container { padding: 1.5rem; }
+            h1 { font-size: 2.7rem; }
+            .description { max-width: 100%; }
+            .hero { flex-direction: column-reverse; }
+            .discord-row { flex-direction: column; align-items: flex-start; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- nagłówek z logo (Imgur) oraz językami -->
+        <!-- nagłówek -->
         <div class="navbar">
             <div class="logo-area">
                 <img id="siteLogo" class="logo-img" src="https://i.imgur.com/ieaAZyE.jpeg" alt="VoidClient Logo">
@@ -431,7 +408,7 @@
             </div>
         </div>
 
-        <!-- główny hero -->
+        <!-- hero -->
         <div class="hero">
             <div class="hero-left">
                 <div class="badge" id="versionBadge">
@@ -460,8 +437,7 @@
                 </div>
             </div>
             <div class="hero-right">
-                <div style="width: 100%; text-align: center;">
-                    <!-- duży obrazek (placeholder, można podmienić na imgur) -->
+                <div style="width:100%; text-align:center">
                     <img id="heroLargeImg" class="hero-img" src="https://placehold.co/700x450/242b38/eef2ff?text=VoidClient+%7C+Minecraft+Launcher+Preview" alt="VoidClient preview (imgur later)">
                     <div class="img-caption">
                         <i class="fas fa-image"></i> <span id="imgCaptionText">▶ Duży obrazek z imgur (później zmienisz)</span>
@@ -470,7 +446,7 @@
             </div>
         </div>
 
-        <!-- DODATKOWA SEKCJA: DISCORD + FAQ -->
+        <!-- Discord + FAQ -->
         <div class="extra-section">
             <div class="discord-row">
                 <div class="discord-info">
@@ -488,9 +464,7 @@
             <div class="faq-title">
                 <i class="fas fa-question-circle"></i> <span id="faqTitle">Frequently Asked Questions</span>
             </div>
-            <div class="faq-list" id="faqList">
-                <!-- pytania będą generowane dynamicznie przez JS (aby były dwujęzyczne) -->
-            </div>
+            <div class="faq-list" id="faqList"></div>
         </div>
 
         <div class="footer-note">
@@ -499,7 +473,7 @@
     </div>
 
     <script>
-        // ---------------------------- TŁUMACZENIA (EN/PL) ---------------------------------
+        // ------------------------ TŁUMACZENIA ------------------------
         const translations = {
             en: {
                 badgeText: "MINECRAFT LAUNCHER",
@@ -547,7 +521,7 @@
             }
         };
 
-        // ----------------------------- LICZNIK POBRAŃ ---------------------------------
+        // ------------------------ LICZNIK POBRAŃ (prawdziwy, start od 0) ------------------------
         let currentDownloads = 0;
         const STORAGE_KEY = "voidclient_downloads_count";
 
@@ -556,7 +530,7 @@
             if (stored !== null && !isNaN(parseInt(stored))) {
                 currentDownloads = parseInt(stored);
             } else {
-                currentDownloads = 1872;  // startowa liczba pobrań
+                currentDownloads = 0;   // start od zera – żadnych sztucznych pobrań
                 localStorage.setItem(STORAGE_KEY, currentDownloads);
             }
             updateCounterUI();
@@ -573,36 +547,31 @@
             updateCounterUI();
         }
 
-        // ----------------------------- OBSŁUGA JĘZYKA ---------------------------------
+        // ------------------------ OBSŁUGA JĘZYKA ------------------------
         let currentLang = "en";
 
         function renderFAQ(lang) {
-            const faqContainer = document.getElementById("faqList");
-            if (!faqContainer) return;
+            const container = document.getElementById("faqList");
+            if (!container) return;
             const items = translations[lang].faqItems;
-            faqContainer.innerHTML = "";
-            items.forEach((item, idx) => {
-                const faqItemDiv = document.createElement("div");
-                faqItemDiv.className = "faq-item";
-                const questionBtn = document.createElement("button");
-                questionBtn.className = "faq-question";
-                questionBtn.innerHTML = `<span>${item.q}</span><i class="fas fa-chevron-down"></i>`;
-                const answerDiv = document.createElement("div");
-                answerDiv.className = "faq-answer";
-                answerDiv.innerHTML = `<p>${item.a}</p>`;
-                questionBtn.addEventListener("click", () => {
-                    const isOpen = answerDiv.classList.contains("show");
-                    answerDiv.classList.toggle("show");
-                    const icon = questionBtn.querySelector("i");
-                    if (answerDiv.classList.contains("show")) {
-                        icon.style.transform = "rotate(180deg)";
-                    } else {
-                        icon.style.transform = "rotate(0deg)";
-                    }
+            container.innerHTML = "";
+            items.forEach(item => {
+                const div = document.createElement("div");
+                div.className = "faq-item";
+                const btn = document.createElement("button");
+                btn.className = "faq-question";
+                btn.innerHTML = `<span>${item.q}</span><i class="fas fa-chevron-down"></i>`;
+                const ans = document.createElement("div");
+                ans.className = "faq-answer";
+                ans.innerHTML = `<p>${item.a}</p>`;
+                btn.addEventListener("click", () => {
+                    ans.classList.toggle("show");
+                    const icon = btn.querySelector("i");
+                    icon.style.transform = ans.classList.contains("show") ? "rotate(180deg)" : "rotate(0deg)";
                 });
-                faqItemDiv.appendChild(questionBtn);
-                faqItemDiv.appendChild(answerDiv);
-                faqContainer.appendChild(faqItemDiv);
+                div.appendChild(btn);
+                div.appendChild(ans);
+                container.appendChild(div);
             });
         }
 
@@ -622,14 +591,9 @@
             document.getElementById("discordDesc").innerText = t.discordDesc;
             document.getElementById("discordBtnText").innerText = t.discordBtnText;
             document.getElementById("faqTitle").innerText = t.faqTitle;
-            
-            // dynamiczne FAQ
             renderFAQ(lang);
-            
-            // alert message do learn more
             window.currentLearnMoreMsg = t.learnMoreAlert;
             
-            // aktywny przycisk języka
             const enBtn = document.getElementById("langEnBtn");
             const plBtn = document.getElementById("langPlBtn");
             if (lang === "en") {
@@ -644,66 +608,52 @@
         }
 
         function setLanguage(lang) {
-            if (lang === "en" || lang === "pl") {
-                applyLanguage(lang);
-            }
+            if (lang === "en" || lang === "pl") applyLanguage(lang);
         }
 
         function initLanguage() {
-            const savedLang = localStorage.getItem("voidclient_lang_pref");
-            if (savedLang === "pl") {
-                applyLanguage("pl");
-            } else {
-                applyLanguage("en");
-            }
+            const saved = localStorage.getItem("voidclient_lang_pref");
+            applyLanguage(saved === "pl" ? "pl" : "en");
         }
 
-        // ----------------------------- OBSŁUGA PRZYCISKÓW ---------------------------------
+        // ------------------------ EVENTY ------------------------
         function setupEventListeners() {
-            const downloadButton = document.getElementById("downloadBtn");
-            if (downloadButton) {
-                downloadButton.addEventListener("click", (e) => {
+            const downloadBtn = document.getElementById("downloadBtn");
+            if (downloadBtn) {
+                downloadBtn.addEventListener("click", (e) => {
                     e.preventDefault();
-                    incrementDownloadCounter();
-                    // tymczasowy link do YouTube (zgodnie z wymaganiem)
+                    incrementDownloadCounter();   // ➕ każde kliknięcie = +1
                     window.open("https://www.youtube.com", "_blank");
                 });
             }
             
-            const learnMoreBtn = document.getElementById("learnMoreBtn");
-            if (learnMoreBtn) {
-                learnMoreBtn.addEventListener("click", () => {
-                    let msg = currentLang === "pl" ? translations.pl.learnMoreAlert : translations.en.learnMoreAlert;
+            const learnMore = document.getElementById("learnMoreBtn");
+            if (learnMore) {
+                learnMore.addEventListener("click", () => {
+                    const msg = currentLang === "pl" ? translations.pl.learnMoreAlert : translations.en.learnMoreAlert;
                     alert(msg);
                 });
             }
             
-            // GitHub link już ma href, zapewniamy bezpieczeństwo
-            const githubLink = document.getElementById("githubBtn");
-            if (githubLink) {
-                githubLink.setAttribute("target", "_blank");
-                githubLink.setAttribute("rel", "noopener noreferrer");
+            // GitHub i Discord – otwieranie w nowej karcie
+            const github = document.getElementById("githubBtn");
+            if (github) {
+                github.setAttribute("target", "_blank");
+                github.setAttribute("rel", "noopener noreferrer");
             }
-            // Discord link — teraz właściwy, bez alertu
-            const discordLink = document.getElementById("discordLink");
-            if (discordLink) {
-                // upewniamy się, że otwiera się w nowej karcie
-                discordLink.setAttribute("target", "_blank");
-                discordLink.setAttribute("rel", "noopener noreferrer");
+            const discord = document.getElementById("discordLink");
+            if (discord) {
+                discord.setAttribute("target", "_blank");
+                discord.setAttribute("rel", "noopener noreferrer");
             }
         }
 
-        // mała pomoc dla podmiany obrazków imgur
-        function setImgurHelper() {
-            console.log("🎨 VOIDCLIENT | Aby podmienić duży obrazek: document.getElementById('heroLargeImg').src = 'TWOJ_URL_Z_IMGUR'");
-        }
-
-        // Inicjalizacja
+        // ------------------------ INICJALIZACJA ------------------------
         function init() {
-            loadDownloadCounter();
+            loadDownloadCounter();   // start od 0
             initLanguage();
             setupEventListeners();
-            setImgurHelper();
+            console.log("✅ Licznik pobrań działa poprawnie – każde kliknięcie Download Now dodaje +1.");
         }
         
         init();
