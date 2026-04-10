@@ -51,7 +51,7 @@
         .logo-img {
             width: 52px;
             height: 52px;
-            object-fit: contain;
+            object-fit: cover;
             background: rgba(255,255,255,0.1);
             border-radius: 18px;
             transition: transform 0.2s ease;
@@ -419,10 +419,10 @@
 </head>
 <body>
     <div class="container">
-        <!-- nagłówek z logo oraz językami -->
+        <!-- nagłówek z logo (Imgur) oraz językami -->
         <div class="navbar">
             <div class="logo-area">
-                <img id="siteLogo" class="logo-img" src="https://placehold.co/200x200?text=VC&bg=20232e&textColor=ffffff" alt="VoidClient Logo (imgur later)">
+                <img id="siteLogo" class="logo-img" src="https://i.imgur.com/ieaAZyE.jpeg" alt="VoidClient Logo">
                 <span class="logo-text">VoidClient</span>
             </div>
             <div class="lang-switch">
@@ -461,9 +461,10 @@
             </div>
             <div class="hero-right">
                 <div style="width: 100%; text-align: center;">
+                    <!-- duży obrazek (placeholder, można podmienić na imgur) -->
                     <img id="heroLargeImg" class="hero-img" src="https://placehold.co/700x450/242b38/eef2ff?text=VoidClient+%7C+Minecraft+Launcher+Preview" alt="VoidClient preview (imgur later)">
                     <div class="img-caption">
-                        <i class="fas fa-image"></i> <span id="imgCaptionText">▶ Obrazek z imgur (możesz podmienić)</span>
+                        <i class="fas fa-image"></i> <span id="imgCaptionText">▶ Duży obrazek z imgur (później zmienisz)</span>
                     </div>
                 </div>
             </div>
@@ -508,7 +509,7 @@
                 githubBtnText: "GitHub Source",
                 learnMoreText: "Learn more",
                 downloadsLabel: "Downloads:",
-                imgCaptionText: "▶ Image from imgur (replace later)",
+                imgCaptionText: "▶ Large image from imgur (replace later)",
                 footerNoteText: "Open source & blazing fast",
                 learnMoreAlert: "📌 More about VoidClient: ultra-fast updates, mod support, full control.",
                 discordTitle: "Join our Community",
@@ -530,7 +531,7 @@
                 githubBtnText: "Źródło GitHub",
                 learnMoreText: "Dowiedz się więcej",
                 downloadsLabel: "Pobrania:",
-                imgCaptionText: "▶ Obraz z imgur (później zmienisz)",
+                imgCaptionText: "▶ Duży obraz z imgur (później zmienisz)",
                 footerNoteText: "Open source i błyskawiczna wydajność",
                 learnMoreAlert: "📌 Więcej o VoidClient: błyskawiczne aktualizacje, wsparcie dla modów, pełna kontrola.",
                 discordTitle: "Dołącz do społeczności",
@@ -591,7 +592,6 @@
                 answerDiv.innerHTML = `<p>${item.a}</p>`;
                 questionBtn.addEventListener("click", () => {
                     const isOpen = answerDiv.classList.contains("show");
-                    // zamknij wszystkie inne opcjonalnie? lepiej toggle dla klikniętego
                     answerDiv.classList.toggle("show");
                     const icon = questionBtn.querySelector("i");
                     if (answerDiv.classList.contains("show")) {
@@ -688,7 +688,6 @@
             const discordLink = document.getElementById("discordLink");
             if (discordLink) {
                 discordLink.addEventListener("click", (e) => {
-                    // można zmienić docelowy link, domyślnie placeholder
                     if (discordLink.getAttribute("href") === "https://discord.com/invite/placeholder") {
                         e.preventDefault();
                         alert(currentLang === "pl" ? "Link Discord: zmień go na właściwy w kodzie (atrybut href)." : "Discord link: replace with your invite URL.");
@@ -699,7 +698,7 @@
 
         // mała pomoc dla podmiany obrazków imgur
         function setImgurHelper() {
-            console.log("🎨 VOIDCLIENT | Aby podmienić obrazy:\n- Logo: document.getElementById('siteLogo').src = 'TWOJ_URL_Z_IMGUR'\n- Duży obraz: document.getElementById('heroLargeImg').src = 'TWOJ_URL_Z_IMGUR'");
+            console.log("🎨 VOIDCLIENT | Aby podmienić duży obrazek: document.getElementById('heroLargeImg').src = 'TWOJ_URL_Z_IMGUR'");
         }
 
         // Inicjalizacja
