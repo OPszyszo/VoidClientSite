@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>VoidClient — Ultimate Minecraft Launcher</title>
-    <!-- Google Fonts + Font Awesome Icons -->
+    <title>VoidClient — Next-Gen Minecraft Launcher</title>
+    <!-- Google Fonts + Font Awesome 6 -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -16,10 +16,10 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f8f9fc 0%, #cfd5e0 100%);
-            /* szaro-biały gradient – eleganckie przejście od jasnego do stonowanego szarego */
+            /* gradient: szary u góry -> czarny u dołu */
+            background: linear-gradient(145deg, #3a3f4b 0%, #0a0c10 100%);
             min-height: 100vh;
-            color: #1a1e2b;
+            color: #f0f3f8;
             line-height: 1.5;
         }
 
@@ -39,7 +39,7 @@
             gap: 1.2rem;
             margin-bottom: 3rem;
             padding-bottom: 0.75rem;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            border-bottom: 1px solid rgba(255,255,255,0.15);
         }
 
         .logo-area {
@@ -52,7 +52,7 @@
             width: 52px;
             height: 52px;
             object-fit: contain;
-            background: rgba(255,255,240,0.2);
+            background: rgba(255,255,255,0.1);
             border-radius: 18px;
             transition: transform 0.2s ease;
         }
@@ -61,7 +61,7 @@
             font-size: 1.8rem;
             font-weight: 800;
             letter-spacing: -0.5px;
-            background: linear-gradient(130deg, #1f2b3c, #2c3e4e);
+            background: linear-gradient(130deg, #eaeef5, #c0c9d9);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -70,11 +70,11 @@
         .lang-switch {
             display: flex;
             gap: 12px;
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(4px);
+            background: rgba(20, 22, 27, 0.6);
+            backdrop-filter: blur(8px);
             padding: 6px 12px;
             border-radius: 100px;
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .lang-btn {
@@ -86,18 +86,18 @@
             padding: 6px 14px;
             border-radius: 40px;
             transition: all 0.2s;
-            color: #2c3e50;
+            color: #eef2ff;
             font-family: inherit;
         }
 
         .lang-btn.active {
-            background: #1e2a36;
-            color: white;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            background: #ffffff;
+            color: #0f1117;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
         .lang-btn:not(.active):hover {
-            background: rgba(30,42,54,0.1);
+            background: rgba(255,255,255,0.15);
         }
 
         /* główny layout 2 kolumny */
@@ -124,14 +124,14 @@
 
         .badge {
             display: inline-block;
-            background: rgba(0,0,0,0.08);
-            backdrop-filter: blur(2px);
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(4px);
             padding: 0.3rem 1rem;
             border-radius: 40px;
             font-size: 0.8rem;
             font-weight: 500;
             margin-bottom: 1.5rem;
-            color: #2c3e50;
+            color: #d9e2ef;
         }
 
         h1 {
@@ -140,7 +140,7 @@
             letter-spacing: -1px;
             line-height: 1.2;
             margin-bottom: 1.2rem;
-            background: linear-gradient(120deg, #181e2c, #2c3e50);
+            background: linear-gradient(120deg, #ffffff, #bdc4d4);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -148,7 +148,7 @@
 
         .description {
             font-size: 1.2rem;
-            color: #2c3e50;
+            color: #cfddee;
             margin-bottom: 2rem;
             max-width: 90%;
             font-weight: 450;
@@ -177,37 +177,37 @@
         }
 
         .btn-primary {
-            background: #1f2f3c;
+            background: #2c3e4e;
             color: white;
-            box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.3);
         }
 
         .btn-primary:hover {
-            background: #0f1e2a;
+            background: #1a2c3b;
             transform: translateY(-3px);
-            box-shadow: 0 14px 24px rgba(0,0,0,0.12);
+            box-shadow: 0 14px 24px rgba(0,0,0,0.4);
         }
 
         .btn-outline {
             background: transparent;
-            border: 1.5px solid #2c3e50;
-            color: #1e2a36;
+            border: 1.5px solid #8f9bb3;
+            color: #f0f3fa;
         }
 
         .btn-outline:hover {
-            background: rgba(44,62,80,0.08);
+            background: rgba(143,155,179,0.2);
             transform: translateY(-2px);
         }
 
         .btn-ghost {
-            background: rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.08);
             backdrop-filter: blur(4px);
-            border: 1px solid rgba(0,0,0,0.1);
-            color: #1e2a36;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #eef2ff;
         }
 
         .btn-ghost:hover {
-            background: white;
+            background: rgba(255,255,255,0.2);
             transform: translateY(-2px);
         }
 
@@ -216,36 +216,36 @@
             align-items: center;
             gap: 8px;
             font-size: 1rem;
-            background: rgba(0,0,0,0.04);
+            background: rgba(0,0,0,0.35);
             padding: 0.7rem 1.4rem;
             border-radius: 60px;
             width: fit-content;
-            backdrop-filter: blur(2px);
+            backdrop-filter: blur(4px);
         }
 
         .download-stats i {
             font-size: 1.3rem;
-            color: #2c3e50;
+            color: #bdd4ff;
         }
 
         .download-count {
             font-weight: 800;
             font-size: 1.3rem;
             margin-left: 4px;
-            color: #0f2b3b;
+            color: white;
         }
 
-        /* obrazek hero - duży placeholder (imgur później) */
+        /* obrazek hero */
         .hero-img {
             max-width: 100%;
             border-radius: 32px;
-            box-shadow: 0 25px 40px -12px rgba(0,0,0,0.25);
+            box-shadow: 0 25px 40px -12px rgba(0,0,0,0.5);
             transition: transform 0.25s ease;
-            background: #eef2f7;
+            background: #1e2430;
             object-fit: cover;
             width: 100%;
             height: auto;
-            border: 1px solid rgba(255,255,255,0.6);
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
         .hero-img:hover {
@@ -256,8 +256,8 @@
             text-align: center;
             font-size: 0.75rem;
             margin-top: 12px;
-            color: #4a5b6e;
-            background: rgba(255,255,240,0.5);
+            color: #b9c4da;
+            background: rgba(0,0,0,0.3);
             width: fit-content;
             padding: 4px 12px;
             border-radius: 60px;
@@ -265,13 +265,135 @@
             margin-right: auto;
         }
 
-        /* stopka/info */
+        /* SEKCJA DISCORD + FAQ */
+        .extra-section {
+            margin: 4rem 0 2rem;
+            background: rgba(10, 12, 18, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 2rem;
+            padding: 2rem 2rem 2rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .discord-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .discord-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .discord-icon {
+            font-size: 2.5rem;
+            color: #5865F2;
+        }
+
+        .discord-text h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .discord-text p {
+            color: #b9c7df;
+        }
+
+        .btn-discord {
+            background: #5865F2;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 40px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-discord:hover {
+            background: #4752c4;
+            transform: scale(1.02);
+        }
+
+        /* FAQ accordion */
+        .faq-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .faq-item {
+            background: rgba(0,0,0,0.35);
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255,255,255,0.08);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            text-align: left;
+            background: transparent;
+            border: none;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #f0f3fc;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: inherit;
+            transition: 0.2s;
+        }
+
+        .faq-question:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .faq-question i {
+            font-size: 1.2rem;
+            transition: transform 0.2s;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.2s;
+            background: rgba(0,0,0,0.2);
+            border-top: 1px solid transparent;
+        }
+
+        .faq-answer.show {
+            max-height: 300px;
+            padding: 1rem 1.5rem;
+            border-top-color: rgba(255,255,255,0.1);
+        }
+
+        .faq-answer p {
+            color: #cfddee;
+            line-height: 1.5;
+        }
+
         .footer-note {
-            margin-top: 4rem;
+            margin-top: 3rem;
             text-align: center;
             font-size: 0.8rem;
-            color: #3a4c62;
-            border-top: 1px solid rgba(0,0,0,0.08);
+            color: #9aa9c2;
+            border-top: 1px solid rgba(255,255,255,0.1);
             padding-top: 2rem;
         }
 
@@ -288,32 +410,19 @@
             .hero {
                 flex-direction: column-reverse;
             }
-            .button-group {
-                justify-content: center;
-            }
-            .download-stats {
-                margin: 0 auto;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .btn {
-                padding: 0.7rem 1.2rem;
-                font-size: 0.85rem;
-            }
-            .logo-text {
-                font-size: 1.4rem;
+            .discord-row {
+                flex-direction: column;
+                align-items: flex-start;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- nagłówek z logo (imgur placeholder) oraz języki -->
+        <!-- nagłówek z logo oraz językami -->
         <div class="navbar">
             <div class="logo-area">
-                <!-- logo z imgur - użytkownik podmieni później źródło -->
-                <img id="siteLogo" class="logo-img" src="https://placehold.co/200x200?text=VC+Logo&bg=2c3e50&textColor=ffffff" alt="VoidClient Logo (imgur later)">
+                <img id="siteLogo" class="logo-img" src="https://placehold.co/200x200?text=VC&bg=20232e&textColor=ffffff" alt="VoidClient Logo (imgur later)">
                 <span class="logo-text">VoidClient</span>
             </div>
             <div class="lang-switch">
@@ -322,7 +431,7 @@
             </div>
         </div>
 
-        <!-- główna sekcja hero (lewa tekst+prawa grafika) -->
+        <!-- główny hero -->
         <div class="hero">
             <div class="hero-left">
                 <div class="badge" id="versionBadge">
@@ -334,20 +443,16 @@
                     Manage your installations effortlessly.
                 </p>
                 <div class="button-group">
-                    <!-- przycisk download - link do youtube.com (tymczasowo) + zwiększa licznik -->
                     <button id="downloadBtn" class="btn btn-primary">
                         <i class="fas fa-download"></i> <span id="downloadBtnText">Download Now</span>
                     </button>
-                    <!-- przycisk GitHub Source (tymczasowy link github) -->
                     <a id="githubBtn" href="https://github.com" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
                         <i class="fab fa-github"></i> <span id="githubBtnText">GitHub Source</span>
                     </a>
-                    <!-- Learn more przycisk (demo) -->
                     <button id="learnMoreBtn" class="btn btn-ghost">
                         <i class="fas fa-circle-info"></i> <span id="learnMoreText">Learn more</span>
                     </button>
                 </div>
-                <!-- licznik pobrań z dynamiczną etykietą -->
                 <div class="download-stats">
                     <i class="fas fa-arrow-down"></i>
                     <span id="downloadsLabel">Downloads:</span>
@@ -356,21 +461,44 @@
             </div>
             <div class="hero-right">
                 <div style="width: 100%; text-align: center;">
-                    <!-- duży obrazek (z imgur później) - placeholder z efektem wizualnym -->
-                    <img id="heroLargeImg" class="hero-img" src="https://placehold.co/700x450/2c3e50/white?text=VoidClient+Preview+%F0%9F%8E%AE+Minecraft+Launcher" alt="VoidClient preview - replace with imgur image">
+                    <img id="heroLargeImg" class="hero-img" src="https://placehold.co/700x450/242b38/eef2ff?text=VoidClient+%7C+Minecraft+Launcher+Preview" alt="VoidClient preview (imgur later)">
                     <div class="img-caption">
-                        <i class="fas fa-image"></i> <span id="imgCaptionText">▶ Zdjęcie z imgur (możesz podmienić)</span>
+                        <i class="fas fa-image"></i> <span id="imgCaptionText">▶ Obrazek z imgur (możesz podmienić)</span>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- DODATKOWA SEKCJA: DISCORD + FAQ -->
+        <div class="extra-section">
+            <div class="discord-row">
+                <div class="discord-info">
+                    <i class="fab fa-discord discord-icon"></i>
+                    <div class="discord-text">
+                        <h3 id="discordTitle">Join our Community</h3>
+                        <p id="discordDesc">Get support, share feedback, and play with others on Discord.</p>
+                    </div>
+                </div>
+                <a id="discordLink" href="https://discord.com/invite/placeholder" target="_blank" rel="noopener noreferrer" class="btn-discord">
+                    <i class="fab fa-discord"></i> <span id="discordBtnText">Join Discord →</span>
+                </a>
+            </div>
+
+            <div class="faq-title">
+                <i class="fas fa-question-circle"></i> <span id="faqTitle">Frequently Asked Questions</span>
+            </div>
+            <div class="faq-list" id="faqList">
+                <!-- pytania będą generowane dynamicznie przez JS (aby były dwujęzyczne) -->
+            </div>
+        </div>
+
         <div class="footer-note">
             <i class="fas fa-code-branch"></i> VoidClient — next-gen Minecraft launcher • <span id="footerNoteText">Open source & blazing fast</span>
         </div>
     </div>
 
     <script>
-        // ----------------------------- TEKSTY I TŁUMACZENIA (EN/PL) ---------------------------------
+        // ---------------------------- TŁUMACZENIA (EN/PL) ---------------------------------
         const translations = {
             en: {
                 badgeText: "MINECRAFT LAUNCHER",
@@ -382,23 +510,43 @@
                 downloadsLabel: "Downloads:",
                 imgCaptionText: "▶ Image from imgur (replace later)",
                 footerNoteText: "Open source & blazing fast",
-                learnMoreAlert: "📌 More information about VoidClient: ultra-fast updates, mod support, and complete control over your Minecraft experience."
+                learnMoreAlert: "📌 More about VoidClient: ultra-fast updates, mod support, full control.",
+                discordTitle: "Join our Community",
+                discordDesc: "Get support, share feedback, and play with others on Discord.",
+                discordBtnText: "Join Discord →",
+                faqTitle: "Frequently Asked Questions",
+                faqItems: [
+                    { q: "Is VoidClient free?", a: "Yes, VoidClient is completely free and open-source. No hidden payments." },
+                    { q: "Which Minecraft versions are supported?", a: "We support all versions from 1.8 to the latest 1.20+, including snapshots." },
+                    { q: "Can I use my own mods?", a: "Absolutely. VoidClient has full mod management and custom profile support." },
+                    { q: "Does it include OptiFine / Sodium?", a: "You can install performance mods easily via integrated mod manager." }
+                ]
             },
             pl: {
                 badgeText: "LAUNCHER MINECRAFT",
                 mainTitle: "VoidClient",
-                mainDesc: "Wysokowydajny, konfigurowalny launcher Minecraft zaprojektowany z myślą o szybkości i prostocie. Zarządzaj swoimi instalacjami bez wysiłku.",
+                mainDesc: "Wysokowydajny, konfigurowalny launcher Minecraft zaprojektowany z myślą o szybkości i prostocie. Zarządzaj instalacjami bez wysiłku.",
                 downloadBtnText: "Pobierz teraz",
                 githubBtnText: "Źródło GitHub",
                 learnMoreText: "Dowiedz się więcej",
                 downloadsLabel: "Pobrania:",
                 imgCaptionText: "▶ Obraz z imgur (później zmienisz)",
                 footerNoteText: "Open source i błyskawiczna wydajność",
-                learnMoreAlert: "📌 Więcej informacji o VoidClient: błyskawiczne aktualizacje, wsparcie dla modów i pełna kontrola nad Minecraft."
+                learnMoreAlert: "📌 Więcej o VoidClient: błyskawiczne aktualizacje, wsparcie dla modów, pełna kontrola.",
+                discordTitle: "Dołącz do społeczności",
+                discordDesc: "Uzyskaj pomoc, dziel się opiniami i graj z innymi na Discordzie.",
+                discordBtnText: "Dołącz do Discord →",
+                faqTitle: "Najczęściej zadawane pytania",
+                faqItems: [
+                    { q: "Czy VoidClient jest darmowy?", a: "Tak, VoidClient jest całkowicie darmowy i open-source. Żadnych ukrytych opłat." },
+                    { q: "Które wersje Minecraft są obsługiwane?", a: "Obsługujemy wszystkie wersje od 1.8 do najnowszej 1.20+, włączając snapshoty." },
+                    { q: "Czy mogę używać własnych modów?", a: "Oczywiście. VoidClient posiada pełne zarządzanie modami i wsparcie dla profili." },
+                    { q: "Czy zawiera OptiFine / Sodium?", a: "Możesz łatwo zainstalować mody wydajnościowe poprzez zintegrowany menedżer modów." }
+                ]
             }
         };
 
-        // ----------------------------- LICZNIK POBRAŃ (localStorage) ---------------------------------
+        // ----------------------------- LICZNIK POBRAŃ ---------------------------------
         let currentDownloads = 0;
         const STORAGE_KEY = "voidclient_downloads_count";
 
@@ -407,8 +555,7 @@
             if (stored !== null && !isNaN(parseInt(stored))) {
                 currentDownloads = parseInt(stored);
             } else {
-                // domyślna liczba pobrań (przykładowo atrakcyjna) - 1247
-                currentDownloads = 1247;
+                currentDownloads = 1872;  // startowa liczba pobrań
                 localStorage.setItem(STORAGE_KEY, currentDownloads);
             }
             updateCounterUI();
@@ -426,39 +573,63 @@
         }
 
         // ----------------------------- OBSŁUGA JĘZYKA ---------------------------------
-        let currentLang = "en";   // domyślnie angielski
+        let currentLang = "en";
 
-        // pobieranie elementów do tłumaczenia
-        const elementsMap = {
-            badgeText: document.getElementById("badgeText"),
-            mainDesc: document.getElementById("mainDesc"),
-            downloadBtnText: document.getElementById("downloadBtnText"),
-            githubBtnText: document.getElementById("githubBtnText"),
-            learnMoreText: document.getElementById("learnMoreText"),
-            downloadsLabel: document.getElementById("downloadsLabel"),
-            imgCaptionText: document.getElementById("imgCaptionText"),
-            footerNoteText: document.getElementById("footerNoteText")
-        };
-        // dodatkowo tytuł h1 (mainTitle) jest statyczny "VoidClient" ale może być zmienny jeśli ktoś chce, w sumie nie zmienia się w tłumaczeniach, pozostawiamy ten sam, jednak dla spójności można ustawić (jest identyczny w obu językach)
-        // ale dla potencjalnej zmiany tekstu głównego też użyjemy:
-        const mainTitleElem = document.getElementById("mainTitle");
-        
+        function renderFAQ(lang) {
+            const faqContainer = document.getElementById("faqList");
+            if (!faqContainer) return;
+            const items = translations[lang].faqItems;
+            faqContainer.innerHTML = "";
+            items.forEach((item, idx) => {
+                const faqItemDiv = document.createElement("div");
+                faqItemDiv.className = "faq-item";
+                const questionBtn = document.createElement("button");
+                questionBtn.className = "faq-question";
+                questionBtn.innerHTML = `<span>${item.q}</span><i class="fas fa-chevron-down"></i>`;
+                const answerDiv = document.createElement("div");
+                answerDiv.className = "faq-answer";
+                answerDiv.innerHTML = `<p>${item.a}</p>`;
+                questionBtn.addEventListener("click", () => {
+                    const isOpen = answerDiv.classList.contains("show");
+                    // zamknij wszystkie inne opcjonalnie? lepiej toggle dla klikniętego
+                    answerDiv.classList.toggle("show");
+                    const icon = questionBtn.querySelector("i");
+                    if (answerDiv.classList.contains("show")) {
+                        icon.style.transform = "rotate(180deg)";
+                    } else {
+                        icon.style.transform = "rotate(0deg)";
+                    }
+                });
+                faqItemDiv.appendChild(questionBtn);
+                faqItemDiv.appendChild(answerDiv);
+                faqContainer.appendChild(faqItemDiv);
+            });
+        }
+
         function applyLanguage(lang) {
             const t = translations[lang];
             if (!t) return;
-            if (elementsMap.badgeText) elementsMap.badgeText.innerText = t.badgeText;
-            if (elementsMap.mainDesc) elementsMap.mainDesc.innerText = t.mainDesc;
-            if (elementsMap.downloadBtnText) elementsMap.downloadBtnText.innerText = t.downloadBtnText;
-            if (elementsMap.githubBtnText) elementsMap.githubBtnText.innerText = t.githubBtnText;
-            if (elementsMap.learnMoreText) elementsMap.learnMoreText.innerText = t.learnMoreText;
-            if (elementsMap.downloadsLabel) elementsMap.downloadsLabel.innerText = t.downloadsLabel;
-            if (elementsMap.imgCaptionText) elementsMap.imgCaptionText.innerText = t.imgCaptionText;
-            if (elementsMap.footerNoteText) elementsMap.footerNoteText.innerText = t.footerNoteText;
-            if (mainTitleElem) mainTitleElem.innerText = t.mainTitle; // VoidClient, bez zmian ale spójnie
+            document.getElementById("badgeText").innerText = t.badgeText;
+            document.getElementById("mainDesc").innerText = t.mainDesc;
+            document.getElementById("downloadBtnText").innerText = t.downloadBtnText;
+            document.getElementById("githubBtnText").innerText = t.githubBtnText;
+            document.getElementById("learnMoreText").innerText = t.learnMoreText;
+            document.getElementById("downloadsLabel").innerText = t.downloadsLabel;
+            document.getElementById("imgCaptionText").innerText = t.imgCaptionText;
+            document.getElementById("footerNoteText").innerText = t.footerNoteText;
+            document.getElementById("mainTitle").innerText = t.mainTitle;
+            document.getElementById("discordTitle").innerText = t.discordTitle;
+            document.getElementById("discordDesc").innerText = t.discordDesc;
+            document.getElementById("discordBtnText").innerText = t.discordBtnText;
+            document.getElementById("faqTitle").innerText = t.faqTitle;
             
-            // dodatkowo aktualizacja przycisku "Learn more" alert message (przechowamy dla eventu)
+            // dynamiczne FAQ
+            renderFAQ(lang);
+            
+            // alert message do learn more
             window.currentLearnMoreMsg = t.learnMoreAlert;
-            // zmiana aktywnych klas przycisków
+            
+            // aktywny przycisk języka
             const enBtn = document.getElementById("langEnBtn");
             const plBtn = document.getElementById("langPlBtn");
             if (lang === "en") {
@@ -478,7 +649,6 @@
             }
         }
 
-        // Inicjalizacja języka z localStorage lub domyślnie EN
         function initLanguage() {
             const savedLang = localStorage.getItem("voidclient_lang_pref");
             if (savedLang === "pl") {
@@ -488,80 +658,56 @@
             }
         }
 
-        // ----------------------------- OBSŁUGA PRZYCISKÓW I LICZNIKA + LINKI ---------------------------------
+        // ----------------------------- OBSŁUGA PRZYCISKÓW ---------------------------------
         function setupEventListeners() {
             const downloadButton = document.getElementById("downloadBtn");
-            const githubLink = document.getElementById("githubBtn");
-            const learnMoreBtn = document.getElementById("learnMoreBtn");
-            
-            // Download: inkrementacja licznika + otwarcie youtube (tymczasowo)
             if (downloadButton) {
                 downloadButton.addEventListener("click", (e) => {
                     e.preventDefault();
-                    // zwiększamy licznik pobrań
                     incrementDownloadCounter();
-                    // otwieramy link do youtube.com w nowej karcie (zgodnie z wymaganiem)
+                    // tymczasowy link do YouTube (zgodnie z wymaganiem)
                     window.open("https://www.youtube.com", "_blank");
-                    // opcjonalnie subtelna informacja (nic nie psuje)
                 });
             }
             
-            // GitHub source - link już ma href="https://github.com", ale zapewniamy target blank
-            if (githubLink) {
-                // ustawiamy atrybuty bezpieczeństwa (już w HTML, ale dla pewności)
-                githubLink.setAttribute("target", "_blank");
-                githubLink.setAttribute("rel", "noopener noreferrer");
-                // opcjonalnie można dodać jeszcze, że link pozostaje github.com
-                // użytkownik później podmieni docelowy adres
-            }
-            
-            // Learn more - pokazuje wiadomość w zależności od języka
+            const learnMoreBtn = document.getElementById("learnMoreBtn");
             if (learnMoreBtn) {
                 learnMoreBtn.addEventListener("click", () => {
                     let msg = currentLang === "pl" ? translations.pl.learnMoreAlert : translations.en.learnMoreAlert;
                     alert(msg);
                 });
             }
+            
+            // GitHub link już ma href, zapewniamy bezpieczeństwo
+            const githubLink = document.getElementById("githubBtn");
+            if (githubLink) {
+                githubLink.setAttribute("target", "_blank");
+                githubLink.setAttribute("rel", "noopener noreferrer");
+            }
+            // Discord link (placeholder, można zmienić)
+            const discordLink = document.getElementById("discordLink");
+            if (discordLink) {
+                discordLink.addEventListener("click", (e) => {
+                    // można zmienić docelowy link, domyślnie placeholder
+                    if (discordLink.getAttribute("href") === "https://discord.com/invite/placeholder") {
+                        e.preventDefault();
+                        alert(currentLang === "pl" ? "Link Discord: zmień go na właściwy w kodzie (atrybut href)." : "Discord link: replace with your invite URL.");
+                    }
+                });
+            }
         }
 
-        // Obrazek z imgur – użytkownik może podmienić, tutaj dodajemy też informację w konsoli, że można zmienić src dla hero i logo.
-        // Dodatkowo, zapewniamy możliwość łatwej podmiany obrazków przez dewelopera:
-        // logoImg oraz heroLargeImg są dostępne globalnie, użytkownik podmieni atrybut src na docelowy link z imgur.
-        // Dla wygody w konsoli wyświetlimy pomoc.
-        function setPlaceholderInfo() {
-            console.log("🖼️ VOIDCLIENT | Aby podmienić obrazy: \n - Logo: document.getElementById('siteLogo').src = 'TWOJ_URL_Z_IMGUR' \n - Duży obrazek: document.getElementById('heroLargeImg').src = 'TWOJ_URL_Z_IMGUR'");
+        // mała pomoc dla podmiany obrazków imgur
+        function setImgurHelper() {
+            console.log("🎨 VOIDCLIENT | Aby podmienić obrazy:\n- Logo: document.getElementById('siteLogo').src = 'TWOJ_URL_Z_IMGUR'\n- Duży obraz: document.getElementById('heroLargeImg').src = 'TWOJ_URL_Z_IMGUR'");
         }
-        
-        // walidacja i dodatkowe efekty wizualne: przycisk pobierania nie może być spamowany bez konsekwencji, ale to fine.
-        // Licznik jest globalnie spójny.
-        
-        // Dodatkowo: Aktualizacja etykiety po zmianie języka dla licznika już jest, przyciski dynamiczne.
-        // Zapewniamy, że po zmianie języka przycisk github oraz download zachowują funkcjonalność.
-        // Przy zmianie języka nie resetuje licznika.
-        
-        // Nasłuch na przyciski języka
-        function bindLangButtons() {
-            const enBtn = document.getElementById("langEnBtn");
-            const plBtn = document.getElementById("langPlBtn");
-            if (enBtn) {
-                enBtn.addEventListener("click", () => {
-                    setLanguage("en");
-                });
-            }
-            if (plBtn) {
-                plBtn.addEventListener("click", () => {
-                    setLanguage("pl");
-                });
-            }
-        }
-        
-        // Wywołanie główne
+
+        // Inicjalizacja
         function init() {
-            loadDownloadCounter();      // wczytanie liczby pobrań
-            initLanguage();             // ustawienie języka z zapisu lub en
-            bindLangButtons();          // podpięcie zmiany języka
-            setupEventListeners();      // eventy dla przycisków akcji (download, learn more)
-            setPlaceholderInfo();       // informacja w konsoli o możliwości podmiany obrazów
+            loadDownloadCounter();
+            initLanguage();
+            setupEventListeners();
+            setImgurHelper();
         }
         
         init();
