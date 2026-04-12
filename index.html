@@ -1,78 +1,116 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>VoidClient — Next-Gen Minecraft Launcher</title>
-    <!-- Google Fonts + Font Awesome 6 -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <!-- Tailwind + Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Dodatkowe style -->
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        /* Gradient tła – szary u góry, czarny u dołu */
         body {
-            font-family: 'Inter', sans-serif;
             background: linear-gradient(145deg, #3a3f4b 0%, #0a0c10 100%);
-            min-height: 100vh;
-            color: #f0f3f8;
-            line-height: 1.5;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
-
-        .container {
-            max-width: 1300px;
-            margin: 0 auto;
-            padding: 2rem 2rem 3rem;
+        /* Poprawki dla Tailwind */
+        .bg-black\/80 {
+            background-color: rgba(0,0,0,0.8);
         }
-
-        .navbar {
+        .hero-grid {
+            background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        /* Efekt tilt dla obrazka */
+        .tilt-container {
+            perspective: 1000px;
+            display: inline-block;
+        }
+        .tilt-img {
+            transition: transform 0.1s ease-out;
+            will-change: transform;
+            transform-style: preserve-3d;
+            border-radius: 1rem;
+        }
+        /* Karty */
+        .card {
+            background: rgba(10, 12, 18, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        /* FAQ accordion */
+        .faq-item {
+            background: rgba(0,0,0,0.35);
+            border-radius: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255,255,255,0.08);
+            overflow: hidden;
+        }
+        .faq-question {
+            width: 100%;
+            text-align: left;
+            background: transparent;
+            border: none;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #f0f3fc;
+            cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 1.2rem;
-            margin-bottom: 3rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid rgba(255,255,255,0.15);
+            font-family: inherit;
         }
-
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .faq-question:hover {
+            background: rgba(255,255,255,0.05);
         }
-
-        .logo-img {
-            width: 52px;
-            height: 52px;
-            object-fit: cover;
-            background: rgba(255,255,255,0.1);
-            border-radius: 18px;
+        .faq-question i {
+            transition: transform 0.2s;
         }
-
-        .logo-text {
-            font-size: 1.8rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            background: linear-gradient(130deg, #eaeef5, #c0c9d9);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.2s;
+            background: rgba(0,0,0,0.2);
+            border-top: 1px solid transparent;
         }
-
-        .lang-switch {
-            display: flex;
-            gap: 12px;
-            background: rgba(20, 22, 27, 0.6);
-            backdrop-filter: blur(8px);
-            padding: 6px 12px;
-            border-radius: 100px;
-            border: 1px solid rgba(255,255,255,0.1);
+        .faq-answer.show {
+            max-height: 300px;
+            padding: 1rem 1.5rem;
+            border-top-color: rgba(255,255,255,0.1);
         }
-
+        .faq-answer p {
+            color: #cfddee;
+            line-height: 1.5;
+        }
+        /* Przyciski */
+        .btn-primary {
+            background: #2c3e4e;
+            color: white;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+            transition: 0.2s;
+        }
+        .btn-primary:hover {
+            background: #1a2c3b;
+            transform: translateY(-3px);
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 1.5px solid #8f9bb3;
+            color: #f0f3fa;
+            transition: 0.2s;
+        }
+        .btn-secondary:hover {
+            background: rgba(143,155,179,0.2);
+            transform: translateY(-2px);
+        }
         .lang-btn {
             background: transparent;
             border: none;
@@ -83,448 +121,291 @@
             border-radius: 40px;
             transition: all 0.2s;
             color: #eef2ff;
-            font-family: inherit;
         }
-
         .lang-btn.active {
             background: #ffffff;
             color: #0f1117;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
-
         .lang-btn:not(.active):hover {
             background: rgba(255,255,255,0.15);
         }
-
-        .hero {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 3rem;
-            margin: 2rem 0 3rem;
-        }
-
-        .hero-left {
-            flex: 1.2;
-            min-width: 280px;
-        }
-
-        .hero-right {
-            flex: 1;
-            min-width: 280px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .badge {
-            display: inline-block;
-            background: rgba(255,255,255,0.12);
-            backdrop-filter: blur(4px);
-            padding: 0.3rem 1rem;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            margin-bottom: 1.5rem;
-            color: #d9e2ef;
-        }
-
-        h1 {
-            font-size: 3.8rem;
-            font-weight: 800;
-            letter-spacing: -1px;
-            line-height: 1.2;
-            margin-bottom: 1.2rem;
-            background: linear-gradient(120deg, #ffffff, #bdc4d4);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .description {
-            font-size: 1.2rem;
-            color: #cfddee;
-            margin-bottom: 2rem;
-            max-width: 90%;
-            font-weight: 450;
-        }
-
-        .button-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 0.9rem 1.8rem;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 1rem;
-            transition: 0.2s;
-            cursor: pointer;
-            text-decoration: none;
-            border: none;
-            font-family: inherit;
-        }
-
-        .btn-primary {
-            background: #2c3e4e;
-            color: white;
-            box-shadow: 0 8px 18px rgba(0,0,0,0.3);
-        }
-
-        .btn-primary:hover {
-            background: #1a2c3b;
-            transform: translateY(-3px);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1.5px solid #8f9bb3;
-            color: #f0f3fa;
-        }
-
-        .btn-outline:hover {
-            background: rgba(143,155,179,0.2);
-            transform: translateY(-2px);
-        }
-
-        .btn-ghost {
-            background: rgba(255,255,255,0.08);
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: #eef2ff;
-        }
-
-        .btn-ghost:hover {
-            background: rgba(255,255,255,0.2);
-            transform: translateY(-2px);
-        }
-
         .download-stats {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 8px;
-            font-size: 1rem;
             background: rgba(0,0,0,0.35);
-            padding: 0.7rem 1.4rem;
+            padding: 0.5rem 1.2rem;
             border-radius: 60px;
-            width: fit-content;
             backdrop-filter: blur(4px);
-        }
-
-        .download-stats i {
-            font-size: 1.3rem;
-            color: #bdd4ff;
-        }
-
-        .download-count {
-            font-weight: 800;
-            font-size: 1.3rem;
-            margin-left: 4px;
-            color: white;
-        }
-
-        .tilt-container {
-            perspective: 1000px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-        }
-
-        .hero-img {
-            max-width: 100%;
-            border-radius: 32px;
-            box-shadow: 0 25px 40px -12px rgba(0,0,0,0.5);
-            background: #1e2430;
-            object-fit: cover;
-            width: 100%;
-            height: auto;
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: transform 0.1s ease-out;
-            will-change: transform;
-            transform-style: preserve-3d;
-        }
-
-        .img-caption {
-            text-align: center;
-            font-size: 0.75rem;
-            margin-top: 12px;
-            color: #b9c4da;
-            background: rgba(0,0,0,0.3);
-            width: fit-content;
-            padding: 4px 12px;
-            border-radius: 60px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .extra-section {
-            margin: 4rem 0 2rem;
-            background: rgba(10, 12, 18, 0.6);
-            backdrop-filter: blur(8px);
-            border-radius: 2rem;
-            padding: 2rem;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .discord-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .discord-info {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .discord-icon {
-            font-size: 2.5rem;
-            color: #5865F2;
-        }
-
-        .discord-text h3 {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .discord-text p {
-            color: #b9c7df;
-        }
-
-        .btn-discord {
-            background: #5865F2;
-            color: white;
-            border: none;
-            padding: 0.8rem 1.8rem;
-            border-radius: 40px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            transition: 0.2s;
-        }
-
-        .btn-discord:hover {
-            background: #4752c4;
-            transform: scale(1.02);
-        }
-
-        .faq-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .faq-item {
-            background: rgba(0,0,0,0.35);
-            border-radius: 1rem;
-            margin-bottom: 1rem;
-            border: 1px solid rgba(255,255,255,0.08);
-            overflow: hidden;
-        }
-
-        .faq-question {
-            width: 100%;
-            text-align: left;
-            background: transparent;
-            border: none;
-            padding: 1rem 1.5rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #f0f3fc;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-family: inherit;
-        }
-
-        .faq-question:hover {
-            background: rgba(255,255,255,0.05);
-        }
-
-        .faq-question i {
-            transition: transform 0.2s;
-        }
-
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.2s;
-            background: rgba(0,0,0,0.2);
-            border-top: 1px solid transparent;
-        }
-
-        .faq-answer.show {
-            max-height: 300px;
-            padding: 1rem 1.5rem;
-            border-top-color: rgba(255,255,255,0.1);
-        }
-
-        .faq-answer p {
-            color: #cfddee;
-            line-height: 1.5;
-        }
-
-        .footer-note {
-            margin-top: 3rem;
-            text-align: center;
-            font-size: 0.8rem;
-            color: #9aa9c2;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 2rem;
-        }
-
-        @media (max-width: 850px) {
-            .container { padding: 1.5rem; }
-            h1 { font-size: 2.7rem; }
-            .description { max-width: 100%; }
-            .hero { flex-direction: column-reverse; }
-            .discord-row { flex-direction: column; align-items: flex-start; }
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="navbar">
-            <div class="logo-area">
-                <img id="siteLogo" class="logo-img" src="https://i.imgur.com/ieaAZyE.jpeg" alt="VoidClient Logo">
-                <span class="logo-text">VoidClient</span>
-            </div>
-            <div class="lang-switch">
-                <button id="langEnBtn" class="lang-btn active">🇬🇧 EN</button>
-                <button id="langPlBtn" class="lang-btn">🇵🇱 PL</button>
-            </div>
-        </div>
-
-        <div class="hero">
-            <div class="hero-left">
-                <div class="badge" id="versionBadge">
-                    <i class="fas fa-cube"></i> <span id="badgeText">MINECRAFT LAUNCHER</span>
-                </div>
-                <h1 id="mainTitle">VoidClient</h1>
-                <p class="description" id="mainDesc">
-                    High-performance, custom Minecraft launcher designed for speed and simplicity. 
-                    Manage your installations effortlessly.
-                </p>
-                <div class="button-group">
-                    <button id="downloadBtn" class="btn btn-primary">
-                        <i class="fas fa-download"></i> <span id="downloadBtnText">Download Now</span>
-                    </button>
-                    <a id="githubBtn" href="https://github.com/OPszyszo/VoidClient/releases" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
-                        <i class="fab fa-github"></i> <span id="githubBtnText">GitHub Source</span>
+<body class="text-white">
+    <!-- Navigation -->
+    <nav class="bg-black/80 backdrop-blur-md border-b border-white/10 fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#" class="flex-shrink-0 flex items-center">
+                        <img id="siteLogo" src="https://i.imgur.com/ieaAZyE.jpeg" alt="VoidClient" class="h-10 w-10 rounded-lg object-cover">
+                        <span class="ml-3 text-2xl font-bold text-white">VoidClient</span>
                     </a>
-                    <button id="learnMoreBtn" class="btn btn-ghost">
-                        <i class="fas fa-circle-info"></i> <span id="learnMoreText">Learn more</span>
-                    </button>
-                </div>
-                <div class="download-stats">
-                    <i class="fas fa-arrow-down"></i>
-                    <span id="downloadsLabel">Downloads:</span>
-                    <span id="downloadCount" class="download-count">0</span>
-                </div>
-            </div>
-            <div class="hero-right">
-                <div class="tilt-container" id="tiltContainer">
-                    <img id="heroLargeImg" class="hero-img" src="https://i.imgur.com/OvQccxi.png" alt="VoidClient preview">
-                </div>
-                <div class="img-caption">
-                    <i class="fas fa-image"></i> <span id="imgCaptionText">▶ Launcher in Beta 2026.4</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="extra-section">
-            <div class="discord-row">
-                <div class="discord-info">
-                    <i class="fab fa-discord discord-icon"></i>
-                    <div class="discord-text">
-                        <h3 id="discordTitle">Join our Community</h3>
-                        <p id="discordDesc">Get support, share feedback, and play with others on Discord.</p>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="#" class="px-3 py-2 rounded-md text-sm font-medium text-white bg-white/10">Home</a>
+                            <a href="#features" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-white/10 hover:text-white">Funkcje</a>
+                            <a href="#download" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-white/10 hover:text-white">Pobierz</a>
+                            <a href="#faq" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-white/10 hover:text-white">FAQ</a>
+                        </div>
                     </div>
                 </div>
-                <a id="discordLink" href="https://dc.gg/voidclient" target="_blank" rel="noopener noreferrer" class="btn-discord">
-                    <i class="fab fa-discord"></i> <span id="discordBtnText">Join Discord →</span>
+                <div class="flex items-center gap-3">
+                    <div class="lang-switch flex gap-2">
+                        <button id="langEnBtn" class="lang-btn active">🇬🇧 EN</button>
+                        <button id="langPlBtn" class="lang-btn">🇵🇱 PL</button>
+                    </div>
+                    <a href="#" id="loginBtn" class="px-4 py-2 text-sm font-medium text-black bg-white rounded-md hover:bg-gray-200">
+                        <i class="fas fa-user mr-2"></i> <span id="loginText">Zaloguj się</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="pt-32 pb-20 relative overflow-hidden">
+        <div class="absolute inset-0 hero-grid"></div>
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="inline-flex items-center px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm text-gray-200 mb-6" id="heroBadge">
+                Nowy najlepszy client właśnie wystartował!
+            </div>
+            <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-6">
+                VoidClient
+                <span class="block text-gray-300 font-semibold text-2xl md:text-3xl mt-3" id="heroSubtitle">Nowy najlepszy client!</span>
+            </h1>
+            <p class="text-xl text-gray-300 mb-10 max-w-3xl mx-auto" id="heroDesc">
+                Odchudzony launcher i nowoczesne niespotykane w innych clientach funkcje.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button id="downloadBtn" class="btn-primary text-lg px-8 py-3 rounded-full font-semibold">
+                    <i class="fas fa-download mr-2"></i> <span id="downloadBtnText">Pobierz teraz</span>
+                </button>
+                <a href="#features" class="btn-secondary text-lg px-8 py-3 rounded-full font-semibold">
+                    <span id="featuresBtnText">Zobacz funkcje</span>
+                </a>
+                <a href="https://dc.gg/voidclient" target="_blank" rel="noopener noreferrer" class="btn-secondary text-lg px-8 py-3 rounded-full font-semibold">
+                    <i class="fab fa-discord mr-2"></i> <span id="discordBtnHero">Zakup / Discord</span>
                 </a>
             </div>
-
-            <div class="faq-title">
-                <i class="fas fa-question-circle"></i> <span id="faqTitle">Frequently Asked Questions</span>
+            <div class="mt-8 flex justify-center">
+                <div class="download-stats">
+                    <i class="fas fa-arrow-down"></i>
+                    <span id="downloadsLabel">Pobrania:</span>
+                    <span id="downloadCount" class="font-bold text-xl">0</span>
+                </div>
             </div>
-            <div class="faq-list" id="faqList"></div>
         </div>
+    </header>
 
-        <div class="footer-note">
-            <i class="fas fa-code-branch"></i> VoidClient — next-gen Minecraft launcher • <span id="footerNoteText">Open source & blazing fast</span>
+    <!-- Features Section -->
+    <section id="features" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold text-center text-white mb-16" id="featuresTitle">Co dostajesz w VoidClient?</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="card">
+                    <div class="w-16 h-16 bg-white/5 rounded-lg flex items-center justify-center mb-4 border border-white/10">
+                        <i class="fas fa-gauge-high text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2" id="feature1Title">Wydajność</h3>
+                    <p class="text-gray-300" id="feature1Desc">
+                        Automatycznie dodane mody optymalizacyjne. Ciesz się rozgrywką z większą ilością FPS dzięki modom Sodium, Lithium i innym!
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="card">
+                    <div class="w-16 h-16 bg-white/5 rounded-lg flex items-center justify-center mb-4 border border-white/10">
+                        <i class="fas fa-sliders-h text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2" id="feature2Title">Dopracowane moduły</h3>
+                    <p class="text-gray-300" id="feature2Desc">
+                        Najlepsza KillAura, AutoTrap, AutoWeb oraz inne dopięte na ostatni guzik niezbędne moduły.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="card">
+                    <div class="w-16 h-16 bg-white/5 rounded-lg flex items-center justify-center mb-4 border border-white/10">
+                        <i class="fas fa-wand-magic-sparkles text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2" id="feature3Title">Wygląd</h3>
+                    <p class="text-gray-300" id="feature3Desc">
+                        Minimalistyczny czarno-biały UI. Zero kiczu, pełna czytelność.
+                    </p>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <!-- Download CTA + Duży obrazek z efektem tilt -->
+    <section id="download" class="py-20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row gap-12 items-center">
+                <div class="flex-1 text-center md:text-left">
+                    <h2 class="text-3xl font-bold text-white mb-4" id="downloadTitle">Pobierz VoidClient</h2>
+                    <p class="text-gray-300 mb-6" id="downloadDesc">
+                        Pobierz najnowszą wersję launchera i dołącz do społeczności.
+                    </p>
+                    <button id="downloadBtn2" class="btn-primary text-lg px-8 py-3 rounded-full font-semibold">
+                        <i class="fas fa-download mr-2"></i> <span id="downloadBtn2Text">Pobierz teraz</span>
+                    </button>
+                    <div class="mt-4">
+                        <a href="https://github.com/OPszyszo/VoidClient/releases" target="_blank" class="text-gray-400 hover:text-white text-sm">
+                            <i class="fab fa-github mr-1"></i> <span id="githubSourceText">GitHub Source</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="flex-1 flex justify-center">
+                    <div class="tilt-container" id="tiltContainer">
+                        <img id="heroLargeImg" class="tilt-img w-full max-w-md rounded-2xl shadow-2xl border border-white/20" src="https://i.imgur.com/OvQccxi.png" alt="VoidClient preview">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="py-20 bg-white/3">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold text-center text-white mb-12" id="faqTitleMain">FAQ</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="faqStatic">
+                <!-- Static FAQ items will be replaced by dynamic JS but we'll keep structure -->
+            </div>
+            <div class="faq-list mt-6" id="faqList"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black/80 backdrop-blur-md border-t border-white/10 mt-auto">
+        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-white font-bold mb-4">VoidClient</h3>
+                    <p class="text-gray-400 text-sm">
+                        made with &lt;3 by VoidTeam
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4" id="quickLinksTitle">Szybkie linki</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white text-sm">Home</a></li>
+                        <li><a href="#features" class="text-gray-400 hover:text-white text-sm" id="footerFeaturesLink">Funkcje</a></li>
+                        <li><a href="#download" class="text-gray-400 hover:text-white text-sm" id="footerDownloadLink">Pobierz</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4" id="communityTitle">Community</h4>
+                    <ul class="space-y-2">
+                        <li><a href="https://dc.gg/voidclient" target="_blank" class="text-gray-400 hover:text-white text-sm flex items-center">
+                            <i class="fab fa-discord mr-2"></i> Discord
+                        </a></li>
+                        <li><a href="https://github.com/OPszyszo/VoidClient/releases" target="_blank" class="text-gray-400 hover:text-white text-sm flex items-center">
+                            <i class="fab fa-github mr-2"></i> GitHub
+                        </a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4" id="contactTitle">Kontakt</h4>
+                    <ul class="space-y-2">
+                        <li><a href="https://dc.gg/voidclient" target="_blank" class="text-gray-400 hover:text-white text-sm">Discord: dc.gg/voidclient</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-white/10">
+                <p class="text-center text-gray-400 text-sm">
+                    © <span id="currentYear">2026</span> VoidClient. Wszelkie prawa zastrzeżone.
+                </p>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        // ------------------------ TŁUMACZENIA ------------------------
+        // ------------------------ TŁUMACZENIA (EN/PL) ------------------------
         const translations = {
             en: {
-                badgeText: "MINECRAFT LAUNCHER",
-                mainTitle: "VoidClient",
-                mainDesc: "High-performance, custom Minecraft launcher designed for speed and simplicity. Manage your installations effortlessly.",
+                heroBadge: "Brand new best client just launched!",
+                heroSubtitle: "The new best client!",
+                heroDesc: "Lightweight launcher and modern features unseen in other clients.",
                 downloadBtnText: "Download Now",
-                githubBtnText: "GitHub Source",
-                learnMoreText: "Learn more",
+                featuresBtnText: "See features",
+                discordBtnHero: "Purchase / Discord",
                 downloadsLabel: "Downloads:",
-                imgCaptionText: "▶ Launcher in Beta 2026.4",
-                footerNoteText: "Open source & blazing fast",
+                featuresTitle: "What do you get with VoidClient?",
+                feature1Title: "Performance",
+                feature1Desc: "Automatically added optimization mods. Enjoy higher FPS with Sodium, Lithium and more!",
+                feature2Title: "Refined Modules",
+                feature2Desc: "Best KillAura, AutoTrap, AutoWeb and other essential modules perfected.",
+                feature3Title: "Design",
+                feature3Desc: "Minimalistic black-white UI. No clutter, full readability.",
+                downloadTitle: "Download VoidClient",
+                downloadDesc: "Download the latest version of the launcher and join the community.",
+                downloadBtn2Text: "Download Now",
+                githubSourceText: "GitHub Source",
+                faqTitleMain: "FAQ",
+                loginText: "Login",
+                quickLinksTitle: "Quick links",
+                communityTitle: "Community",
+                contactTitle: "Contact",
+                footerFeaturesLink: "Features",
+                footerDownloadLink: "Download",
                 learnMoreAlert: "📌 More about VoidClient: ultra-fast updates, mod support, full control.",
-                discordTitle: "Join our Community",
-                discordDesc: "Get support, share feedback, and play with others on Discord.",
-                discordBtnText: "Join Discord →",
-                faqTitle: "Frequently Asked Questions",
                 faqItems: [
-                    { q: "Is VoidClient free?", a: "Yes, VoidClient is completely free and open-source. No hidden payments." },
-                    { q: "Which Minecraft versions are supported?", a: "We support all versions from 1.8 to the latest 1.20+, including snapshots." },
-                    { q: "Can I use my own mods?", a: "Absolutely. VoidClient has full mod management and custom profile support." },
-                    { q: "Does it include OptiFine / Sodium?", a: "You can install performance mods easily via integrated mod manager." }
+                    { q: "What version is VoidClient for?", a: "VoidClient is for Minecraft 1.21.4 Fabric." },
+                    { q: "Where can I download the launcher?", a: "After logging in, in the panel's download section." },
+                    { q: "Is VoidClient free?", a: "Yes, VoidClient is completely free and open-source." },
+                    { q: "Can I use my own mods?", a: "Absolutely. VoidClient has full mod management and custom profile support." }
                 ]
             },
             pl: {
-                badgeText: "LAUNCHER MINECRAFT",
-                mainTitle: "VoidClient",
-                mainDesc: "Wysokowydajny, konfigurowalny launcher Minecraft zaprojektowany z myślą o szybkości i prostocie. Zarządzaj instalacjami bez wysiłku.",
+                heroBadge: "Nowy najlepszy client właśnie wystartował!",
+                heroSubtitle: "Nowy najlepszy client!",
+                heroDesc: "Odchudzony launcher i nowoczesne niespotykane w innych clientach funkcje.",
                 downloadBtnText: "Pobierz teraz",
-                githubBtnText: "Źródło GitHub",
-                learnMoreText: "Dowiedz się więcej",
+                featuresBtnText: "Zobacz funkcje",
+                discordBtnHero: "Zakup / Discord",
                 downloadsLabel: "Pobrania:",
-                imgCaptionText: "▶ Launcher w wersji Beta 2026.4",
-                footerNoteText: "Open source i błyskawiczna wydajność",
+                featuresTitle: "Co dostajesz w VoidClient?",
+                feature1Title: "Wydajność",
+                feature1Desc: "Automatycznie dodane mody optymalizacyjne. Ciesz się rozgrywką z większą ilością FPS dzięki modom Sodium, Lithium i innym!",
+                feature2Title: "Dopracowane moduły",
+                feature2Desc: "Najlepsza KillAura, AutoTrap, AutoWeb oraz inne dopięte na ostatni guzik niezbędne moduły.",
+                feature3Title: "Wygląd",
+                feature3Desc: "Minimalistyczny czarno-biały UI. Zero kiczu, pełna czytelność.",
+                downloadTitle: "Pobierz VoidClient",
+                downloadDesc: "Pobierz najnowszą wersję launchera i dołącz do społeczności.",
+                downloadBtn2Text: "Pobierz teraz",
+                githubSourceText: "Źródło GitHub",
+                faqTitleMain: "FAQ",
+                loginText: "Zaloguj się",
+                quickLinksTitle: "Szybkie linki",
+                communityTitle: "Community",
+                contactTitle: "Kontakt",
+                footerFeaturesLink: "Funkcje",
+                footerDownloadLink: "Pobierz",
                 learnMoreAlert: "📌 Więcej o VoidClient: błyskawiczne aktualizacje, wsparcie dla modów, pełna kontrola.",
-                discordTitle: "Dołącz do społeczności",
-                discordDesc: "Uzyskaj pomoc, dziel się opiniami i graj z innymi na Discordzie.",
-                discordBtnText: "Dołącz do Discord →",
-                faqTitle: "Najczęściej zadawane pytania",
                 faqItems: [
-                    { q: "Czy VoidClient jest darmowy?", a: "Tak, VoidClient jest całkowicie darmowy i open-source. Żadnych ukrytych opłat." },
-                    { q: "Które wersje Minecraft są obsługiwane?", a: "Obsługujemy wszystkie wersje od 1.8 do najnowszej 1.20+, włączając snapshoty." },
-                    { q: "Czy mogę używać własnych modów?", a: "Oczywiście. VoidClient posiada pełne zarządzanie modami i wsparcie dla profili." },
-                    { q: "Czy zawiera OptiFine / Sodium?", a: "Możesz łatwo zainstalować mody wydajnościowe poprzez zintegrowany menedżer modów." }
+                    { q: "Na jaką wersję jest VoidClient?", a: "VoidClient jest na wersję 1.21.4 fabric." },
+                    { q: "Gdzie pobiorę launchera?", a: "W panelu po zalogowaniu, w sekcji pobierania." },
+                    { q: "Czy VoidClient jest darmowy?", a: "Tak, VoidClient jest całkowicie darmowy i open-source." },
+                    { q: "Czy mogę używać własnych modów?", a: "Oczywiście. VoidClient posiada pełne zarządzanie modami i wsparcie dla profili." }
                 ]
             }
         };
 
-        // ------------------------ LICZNIK POBRAŃ (zapamiętuje) ------------------------
+        // ------------------------ LICZNIK POBRAŃ ------------------------
         let currentDownloads = 0;
         const STORAGE_KEY = "voidclient_downloads_count";
 
@@ -551,7 +432,7 @@
         }
 
         // ------------------------ OBSŁUGA JĘZYKA ------------------------
-        let currentLang = "en";
+        let currentLang = "pl"; // domyślnie polski (bo strona była po polsku)
 
         function renderFAQ(lang) {
             const container = document.getElementById("faqList");
@@ -581,19 +462,31 @@
         function applyLanguage(lang) {
             const t = translations[lang];
             if (!t) return;
-            document.getElementById("badgeText").innerText = t.badgeText;
-            document.getElementById("mainDesc").innerText = t.mainDesc;
+            document.getElementById("heroBadge").innerText = t.heroBadge;
+            document.getElementById("heroSubtitle").innerText = t.heroSubtitle;
+            document.getElementById("heroDesc").innerText = t.heroDesc;
             document.getElementById("downloadBtnText").innerText = t.downloadBtnText;
-            document.getElementById("githubBtnText").innerText = t.githubBtnText;
-            document.getElementById("learnMoreText").innerText = t.learnMoreText;
+            document.getElementById("featuresBtnText").innerText = t.featuresBtnText;
+            document.getElementById("discordBtnHero").innerHTML = `<i class="fab fa-discord mr-2"></i> ${t.discordBtnHero}`;
             document.getElementById("downloadsLabel").innerText = t.downloadsLabel;
-            document.getElementById("imgCaptionText").innerText = t.imgCaptionText;
-            document.getElementById("footerNoteText").innerText = t.footerNoteText;
-            document.getElementById("mainTitle").innerText = t.mainTitle;
-            document.getElementById("discordTitle").innerText = t.discordTitle;
-            document.getElementById("discordDesc").innerText = t.discordDesc;
-            document.getElementById("discordBtnText").innerText = t.discordBtnText;
-            document.getElementById("faqTitle").innerText = t.faqTitle;
+            document.getElementById("featuresTitle").innerText = t.featuresTitle;
+            document.getElementById("feature1Title").innerText = t.feature1Title;
+            document.getElementById("feature1Desc").innerText = t.feature1Desc;
+            document.getElementById("feature2Title").innerText = t.feature2Title;
+            document.getElementById("feature2Desc").innerText = t.feature2Desc;
+            document.getElementById("feature3Title").innerText = t.feature3Title;
+            document.getElementById("feature3Desc").innerText = t.feature3Desc;
+            document.getElementById("downloadTitle").innerText = t.downloadTitle;
+            document.getElementById("downloadDesc").innerText = t.downloadDesc;
+            document.getElementById("downloadBtn2Text").innerText = t.downloadBtn2Text;
+            document.getElementById("githubSourceText").innerText = t.githubSourceText;
+            document.getElementById("faqTitleMain").innerText = t.faqTitleMain;
+            document.getElementById("loginText").innerText = t.loginText;
+            document.getElementById("quickLinksTitle").innerText = t.quickLinksTitle;
+            document.getElementById("communityTitle").innerText = t.communityTitle;
+            document.getElementById("contactTitle").innerText = t.contactTitle;
+            document.getElementById("footerFeaturesLink").innerText = t.footerFeaturesLink;
+            document.getElementById("footerDownloadLink").innerText = t.footerDownloadLink;
             renderFAQ(lang);
             window.currentLearnMoreMsg = t.learnMoreAlert;
             
@@ -616,8 +509,8 @@
 
         function initLanguage() {
             const saved = localStorage.getItem("voidclient_lang_pref");
-            if (saved === "pl") applyLanguage("pl");
-            else applyLanguage("en");
+            if (saved === "en") applyLanguage("en");
+            else applyLanguage("pl");
         }
 
         // ------------------------ EFEKT TILT ------------------------
@@ -625,7 +518,6 @@
             const container = document.getElementById("tiltContainer");
             const img = document.getElementById("heroLargeImg");
             if (!container || !img) return;
-            
             container.addEventListener("mousemove", (e) => {
                 const rect = container.getBoundingClientRect();
                 const x = e.clientX - rect.left;
@@ -636,51 +528,36 @@
                 const rotateY = ((x - centerX) / centerX) * 10;
                 img.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
             });
-            
             container.addEventListener("mouseleave", () => {
                 img.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)";
             });
         }
 
-        // ------------------------ EVENTY ------------------------
+        // ------------------------ OBSŁUGA PRZYCISKÓW ------------------------
         function setupEventListeners() {
-            const downloadBtn = document.getElementById("downloadBtn");
-            if (downloadBtn) {
-                downloadBtn.addEventListener("click", (e) => {
-                    e.preventDefault();
-                    incrementDownloadCounter();
-                    // Twój bezpośredni link do pliku Void-Setup.exe
-                    window.open("https://download1523.mediafire.com/0jd6swy5ysagjmHzOjfNKbplWILXwy64s5KEilMWmIlobmlKtKHPguyGMbS7ashH29tuLYo8aWQ9ID6M1ZTCrB7ARED5ZFYMW0mk_tFB8LOA5syE5-eL7a5WyHRWA4o6Ryg1RixJEB5-oV3BYqAIZCRioXKuNqveZtcC3NB8OZYNEAw/izym26cg6ir2nji/Void-Setup.exe", "_blank");
-                });
-            }
+            const downloadBtns = [document.getElementById("downloadBtn"), document.getElementById("downloadBtn2")];
+            downloadBtns.forEach(btn => {
+                if (btn) {
+                    btn.addEventListener("click", (e) => {
+                        e.preventDefault();
+                        incrementDownloadCounter();
+                        window.open("https://download1523.mediafire.com/0jd6swy5ysagjmHzOjfNKbplWILXwy64s5KEilMWmIlobmlKtKHPguyGMbS7ashH29tuLYo8aWQ9ID6M1ZTCrB7ARED5ZFYMW0mk_tFB8LOA5syE5-eL7a5WyHRWA4o6Ryg1RixJEB5-oV3BYqAIZCRioXKuNqveZtcC3NB8OZYNEAw/izym26cg6ir2nji/Void-Setup.exe", "_blank");
+                    });
+                }
+            });
             
-            const learnMore = document.getElementById("learnMoreBtn");
-            if (learnMore) {
-                learnMore.addEventListener("click", () => {
-                    const msg = currentLang === "pl" ? translations.pl.learnMoreAlert : translations.en.learnMoreAlert;
-                    alert(msg);
-                });
-            }
-            
-            const github = document.getElementById("githubBtn");
-            if (github) {
-                github.setAttribute("target", "_blank");
-                github.setAttribute("rel", "noopener noreferrer");
-            }
-            const discord = document.getElementById("discordLink");
-            if (discord) {
-                discord.setAttribute("target", "_blank");
-                discord.setAttribute("rel", "noopener noreferrer");
-            }
+            // Learn more - brak oryginalnego przycisku, ale dodajemy opcję alertu (np. po kliknięciu w "VoidClient" w stopce? można pominąć)
+            // Dla spójności dodaję mały przycisk "Learn more" w sekcji download? Ale nie ma go w designie. Można dodać jako tooltip.
+            // Zgodnie z wymaganiami, można dodać gdzieś, ale nie narzucam. Jeśli potrzebujesz, łatwo dodać.
         }
 
         // ------------------------ INICJALIZACJA ------------------------
         function init() {
-            loadDownloadCounter();   // wczytuje zapisaną liczbę (start od 0)
+            loadDownloadCounter();
             initLanguage();
             setupEventListeners();
             initTiltEffect();
-            console.log("✅ VoidClient: licznik zapamiętuje kliknięcia, nie zeruje się.");
+            document.getElementById("currentYear").innerText = new Date().getFullYear();
         }
         
         init();
