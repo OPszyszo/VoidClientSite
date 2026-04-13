@@ -3,452 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>VoidClient 1.0 — Nowoczesny Launcher Minecraft</title>
-    <!-- Tailwind + Font Awesome -->
+    <title>VoidClient — Kosmiczny Launcher Minecraft</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        html {
-            scroll-behavior: smooth;
-        }
-        body {
-            background: linear-gradient(145deg, #3a3f4b 0%, #0a0c10 100%);
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-        }
-        .nav-link {
-            transition: all 0.2s;
-        }
-        .nav-link.active {
-            background-color: rgba(255,255,255,0.1);
-            color: white;
-        }
-        .card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -12px rgba(0,0,0,0.3);
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(5px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background: #1e1f2a;
-            border-radius: 1.5rem;
-            padding: 2rem;
-            max-width: 400px;
-            width: 90%;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        .tilt-img {
-            transition: transform 0.1s ease-out;
-            transform-style: preserve-3d;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', system-ui, sans-serif; overflow-x: hidden; background: linear-gradient(145deg, #3a3f4b 0%, #0a0c10 100%); min-height: 100vh; }
+        #spaceCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: 0.7; }
+        .gradient-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(145deg, rgba(58,63,75,0.4) 0%, rgba(10,12,16,0.8) 100%); z-index: 1; pointer-events: none; }
+        .content { position: relative; z-index: 10; }
+        .nav-link { transition: all 0.2s; }
+        .nav-link.active { background-color: rgba(255,255,255,0.15); color: white; }
+        .card { transition: transform 0.3s ease; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.15); border-radius: 1rem; padding: 1.5rem; }
+        .card:hover { transform: translateY(-5px); }
+        .btn-stable { background: white; color: #0a0c10; transition: all 0.2s; }
+        .btn-stable:hover { background: #e5e7eb; transform: scale(1.02); }
+        .btn-beta { background: linear-gradient(135deg, #a855f7, #7e22ce); color: white; transition: all 0.2s; }
+        .btn-beta:hover { transform: scale(1.02); filter: brightness(1.05); }
+        .tilt-img { transition: transform 0.1s ease-out; transform-style: preserve-3d; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: #1a1c26; border-radius: 1.5rem; padding: 2rem; max-width: 400px; width: 90%; border: 1px solid rgba(255,255,255,0.2); color: white; }
+        .hidden-beta { display: none !important; }
+        input::placeholder { color: #9ca3af; }
     </style>
 </head>
-<body class="text-white">
-
-    <!-- Modal logowania (dla beta testera) -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <h3 class="text-2xl font-bold mb-4">Logowanie do VoidClient 1.0</h3>
-            <p class="text-gray-300 mb-2">Wprowadź dane konta beta testera</p>
-            <input type="email" id="loginEmail" placeholder="Email" class="w-full p-2 rounded bg-black/50 border border-white/20 mb-3 text-white">
-            <input type="password" id="loginPassword" placeholder="Hasło" class="w-full p-2 rounded bg-black/50 border border-white/20 mb-4 text-white">
-            <div class="flex gap-3">
-                <button id="loginSubmitBtn" class="bg-white text-black px-4 py-2 rounded-md font-semibold hover:bg-gray-200">Zaloguj się</button>
-                <button id="loginCloseBtn" class="border border-white/30 px-4 py-2 rounded-md">Anuluj</button>
-            </div>
-            <p class="text-xs text-gray-400 mt-4">
-                Przykład: <strong>email@example.com</strong> / <strong>123123</strong>
-            </p>
-        </div>
-    </div>
-
-    <!-- Nawigacja -->
-    <nav class="bg-black/80 backdrop-blur-md border-b border-white/10 fixed w-full z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex items-center">
-                    <a href="#home" class="flex-shrink-0 flex items-center nav-link">
-                        <img src="https://i.imgur.com/ieaAZyE.jpeg" alt="VoidClient Logo" class="h-10 w-10 rounded-lg object-cover">
-                        <span class="ml-3 text-2xl font-bold text-white">VoidClient 1.0</span>
-                    </a>
-                    <div class="hidden md:block ml-10">
-                        <div class="flex items-baseline space-x-4">
-                            <a href="#home" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-white bg-white/10">Home</a>
-                            <a href="#features" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-white/10 hover:text-white">Funkcje</a>
-                            <a href="#download" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-white/10 hover:text-white">Pobierz</a>
-                            <a href="#faq" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-white/10 hover:text-white">FAQ</a>
+<body>
+    <canvas id="spaceCanvas"></canvas>
+    <div class="gradient-overlay"></div>
+    <div class="content">
+        <nav class="bg-black/50 backdrop-blur-md border-b border-white/10 fixed w-full z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <a href="#home" class="flex-shrink-0 flex items-center nav-link">
+                            <img src="https://i.imgur.com/ieaAZyE.jpeg" alt="VoidClient Logo" class="h-10 w-10 rounded-lg object-cover">
+                            <span class="ml-3 text-2xl font-bold text-white">VoidClient</span>
+                        </a>
+                        <div class="hidden md:block ml-10">
+                            <div class="flex items-baseline space-x-4">
+                                <a href="#home" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-white bg-white/10">Home</a>
+                                <a href="#features" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-200 hover:bg-white/10 hover:text-white">Funkcje</a>
+                                <a href="#download" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-200 hover:bg-white/10 hover:text-white">Pobierz</a>
+                                <a href="#faq" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-200 hover:bg-white/10 hover:text-white">FAQ</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div id="authButtons">
+                            <button id="loginBtn" class="px-4 py-2 text-sm font-medium text-white border border-white/30 rounded-md hover:bg-white/10 transition"><i class="fas fa-user mr-2"></i> Zaloguj się (beta)</button>
+                        </div>
+                        <div id="logoutContainer" style="display: none;">
+                            <button id="logoutBtn" class="px-4 py-2 text-sm font-medium text-white border border-purple-500 rounded-md hover:bg-purple-600/30 transition"><i class="fas fa-sign-out-alt mr-2"></i> Wyloguj</button>
                         </div>
                     </div>
                 </div>
-                <div class="flex items-center gap-3">
-                    <div id="authButtons">
-                        <a href="#" id="loginBtn" class="px-4 py-2 text-sm font-medium text-black bg-white rounded-md hover:bg-gray-200">
-                            <i class="fas fa-user mr-2"></i> Zaloguj się
-                        </a>
+            </div>
+        </nav>
+
+        <div id="loginModal" class="modal">
+            <div class="modal-content">
+                <h3 class="text-2xl font-bold mb-4">Logowanie do wersji beta</h3>
+                <p class="text-gray-300 mb-2">Wprowadź swoje dane dostępowe</p>
+                <input type="email" id="loginEmail" placeholder="Adres email" class="w-full p-2 rounded bg-black/50 border border-white/20 mb-3 text-white">
+                <input type="password" id="loginPassword" placeholder="Hasło" class="w-full p-2 rounded bg-black/50 border border-white/20 mb-4 text-white">
+                <div class="flex gap-3">
+                    <button id="loginSubmitBtn" class="bg-purple-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-purple-700">Zaloguj się</button>
+                    <button id="loginCloseBtn" class="border border-white/30 px-4 py-2 rounded-md">Anuluj</button>
+                </div>
+            </div>
+        </div>
+
+        <header id="home" class="pt-32 pb-20 relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <div class="inline-flex items-center px-4 py-2 rounded-full border border-white/20 bg-white/5 text-sm text-gray-200 mb-6">✨ VoidClient 1.0 – gotowy do startu</div>
+                <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-6">VoidClient<span class="block text-gray-200 font-semibold text-2xl md:text-3xl mt-3">Wydajność. Stabilność. Kosmiczna moc.</span></h1>
+                <p class="text-xl text-gray-200 mb-10 max-w-3xl mx-auto">Odchudzony launcher, zaawansowane moduły i niespotykana optymalizacja.</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="#download" class="btn-stable px-8 py-3 rounded-full font-bold text-lg flex items-center justify-center gap-2"><i class="fas fa-download"></i> Pobierz teraz</a>
+                    <a href="#features" class="border border-white/30 px-8 py-3 rounded-full font-bold text-lg hover:bg-white/10 transition text-white">Zobacz funkcje</a>
+                </div>
+                <div class="mt-10 text-gray-300 text-sm">Darmowy i open-source • Aktywna społeczność Discord</div>
+                <div class="flex justify-center mt-8"><div class="tilt-container" style="perspective:1000px; display:inline-block"><img src="https://i.imgur.com/OvQccxi.png" alt="VoidClient Preview" class="tilt-img rounded-2xl shadow-2xl max-w-md w-full border border-white/20"></div></div>
+            </div>
+        </header>
+
+        <section id="features" class="py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-bold text-center text-white mb-16">Co wyróżnia VoidClient?</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="card"><div class="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center mb-4"><i class="fas fa-gauge-high text-white text-2xl"></i></div><h3 class="text-xl font-bold text-white mb-2">Wydajność</h3><p class="text-gray-200">Sodium, Lithium, Starlight – maksymalny FPS bez kompromisów.</p></div>
+                    <div class="card"><div class="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center mb-4"><i class="fas fa-sliders-h text-white text-2xl"></i></div><h3 class="text-xl font-bold text-white mb-2">Zaawansowane moduły</h3><p class="text-gray-200">KillAura, AutoTrap, Scaffold – dopracowane do perfekcji.</p></div>
+                    <div class="card"><div class="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center mb-4"><i class="fas fa-wand-magic-sparkles text-white text-2xl"></i></div><h3 class="text-xl font-bold text-white mb-2">Nowoczesne UI</h3><p class="text-gray-200">Minimalistyczny, w pełni konfigurowalny interfejs.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="download" class="py-20">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <div class="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
+                    <h2 class="text-3xl font-bold text-white mb-4">Pobierz VoidClient</h2>
+                    <p class="text-gray-200 mb-6">Wersja 1.21.4 Fabric – instalator Windows / macOS / Linux</p>
+                    <div class="flex flex-wrap justify-center gap-4 mb-6">
+                        <button id="downloadStableBtn" class="btn-stable px-8 py-3 rounded-full font-bold text-lg flex items-center gap-2"><i class="fas fa-download"></i> Pobierz wersję 1.0</button>
+                        <button id="downloadBetaBtn" class="btn-beta px-8 py-3 rounded-full font-bold text-lg flex items-center gap-2 hidden-beta"><i class="fas fa-flask"></i> Pobierz Beta (YouTube)</button>
                     </div>
-                    <div id="logoutBtnContainer" style="display: none;">
-                        <button id="logoutBtn" class="px-4 py-2 text-sm font-medium text-white border border-white/30 rounded-md hover:bg-white/10">
-                            <i class="fas fa-sign-out-alt mr-2"></i> Wyloguj
-                        </button>
-                    </div>
+                    <div class="inline-flex items-center gap-2 bg-black/50 px-5 py-2 rounded-full"><i class="fas fa-arrow-down text-purple-400"></i><span class="text-white">Łączne pobrania: <span id="downloadCounter">0</span></span></div>
+                    <p class="text-gray-300 text-sm mt-4">Licznik zapamiętuje wszystkie kliknięcia (wersja stabilna + beta).</p>
+                    <div id="betaInfo" class="mt-4 text-purple-300 text-sm hidden-beta"><i class="fas fa-flask mr-1"></i> Witaj, testerze! Masz dostęp do wersji beta.</div>
                 </div>
             </div>
-        </div>
-    </nav>
+        </section>
 
-    <!-- Hero Section (Home) -->
-    <header id="home" class="pt-32 pb-20 relative overflow-hidden">
-        <div class="absolute inset-0 hero-grid bg-[url('https://placehold.co/1920x1080/1a1e2a/white?text=VOID')] opacity-10 bg-cover"></div>
-        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div class="inline-flex items-center px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm text-gray-200 mb-6">
-                ✨ VoidClient 1.0 – Pełna wersja dostępna
-            </div>
-            <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-6">
-                VoidClient 1.0
-                <span class="block text-gray-300 font-semibold text-2xl md:text-3xl mt-3">Wydajność. Stabilność. Nowoczesność.</span>
-            </h1>
-            <p class="text-xl text-gray-300 mb-10 max-w-3xl mx-auto">
-                Odchudzony launcher, zaawansowane moduły i niespotykana optymalizacja.
-            </p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#download" class="bg-white text-black px-8 py-3 rounded-full font-bold text-lg hover:bg-gray-200 transition">Pobierz teraz</a>
-                <a href="#features" class="border border-white/30 px-8 py-3 rounded-full font-bold text-lg hover:bg-white/10 transition">Zobacz funkcje</a>
-            </div>
-            <div class="mt-10 text-gray-400 text-sm">
-                Darmowy i open-source • Aktywna społeczność Discord
-            </div>
-            <div class="flex justify-center mt-8">
-                <div class="tilt-container perspective-1000" style="perspective:1000px; display:inline-block">
-                    <img src="https://i.imgur.com/OvQccxi.png" alt="VoidClient Preview" class="tilt-img rounded-2xl shadow-2xl max-w-md w-full border border-white/20">
+        <section id="faq" class="py-20">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-bold text-center text-white mb-12">FAQ</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-black/40 backdrop-blur-sm rounded-xl p-6 border border-white/10"><h3 class="text-lg font-bold text-white mb-2">Na jaką wersję Minecraft działa VoidClient?</h3><p class="text-gray-200">VoidClient działa na wersji 1.21.4 Fabric, z planami wsparcia dla 1.8 – 1.20+.</p></div>
+                    <div class="bg-black/40 backdrop-blur-sm rounded-xl p-6 border border-white/10"><h3 class="text-lg font-bold text-white mb-2">Czy jest darmowy?</h3><p class="text-gray-200">Tak, VoidClient jest całkowicie darmowy i open-source.</p></div>
+                    <div class="bg-black/40 backdrop-blur-sm rounded-xl p-6 border border-white/10"><h3 class="text-lg font-bold text-white mb-2">Gdzie mogę zgłosić błąd?</h3><p class="text-gray-200">Dołącz na naszego Discorda – link w stopce.</p></div>
+                    <div class="bg-black/40 backdrop-blur-sm rounded-xl p-6 border border-white/10"><h3 class="text-lg font-bold text-white mb-2">Czym różni się wersja beta?</h3><p class="text-gray-200">Wersja beta to przedpremierowe funkcje – dostępna tylko dla zalogowanych testerów.</p></div>
                 </div>
             </div>
-        </div>
-    </header>
+        </section>
 
-    <!-- Funkcje -->
-    <section id="features" class="py-20 bg-white/5">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-4xl font-bold text-center text-white mb-16">Co wyróżnia VoidClient 1.0?</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="card bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
-                    <div class="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-gauge-high text-white text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Wydajność</h3>
-                    <p class="text-gray-300">Sodium, Lithium, Starlight – maksymalny FPS bez kompromisów.</p>
+        <footer class="bg-black/80 backdrop-blur-md border-t border-white/10 mt-auto">
+            <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div><h3 class="text-white font-bold mb-4">VoidClient</h3><p class="text-gray-300 text-sm">made with ❤️ by community</p></div>
+                    <div><h4 class="text-white font-semibold mb-4">Nawigacja</h4><ul class="space-y-2"><li><a href="#home" class="text-gray-300 hover:text-white text-sm">Home</a></li><li><a href="#features" class="text-gray-300 hover:text-white text-sm">Funkcje</a></li><li><a href="#download" class="text-gray-300 hover:text-white text-sm">Pobierz</a></li><li><a href="#faq" class="text-gray-300 hover:text-white text-sm">FAQ</a></li></ul></div>
+                    <div><h4 class="text-white font-semibold mb-4">Społeczność</h4><ul class="space-y-2"><li><a href="https://dc.gg/voidclient" target="_blank" class="text-gray-300 hover:text-white text-sm flex items-center gap-2"><i class="fab fa-discord"></i> Discord</a></li><li><a href="https://github.com/OPszyszo/VoidClient/releases" target="_blank" class="text-gray-300 hover:text-white text-sm flex items-center gap-2"><i class="fab fa-github"></i> GitHub</a></li></ul></div>
+                    <div><h4 class="text-white font-semibold mb-4">Kontakt</h4><p class="text-gray-300 text-sm">Discord: <a href="https://dc.gg/voidclient" class="hover:underline">dc.gg/voidclient</a></p></div>
                 </div>
-                <div class="card bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
-                    <div class="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-sliders-h text-white text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Zaawansowane moduły</h3>
-                    <p class="text-gray-300">KillAura, AutoTrap, Scaffold – dopracowane do perfekcji.</p>
-                </div>
-                <div class="card bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
-                    <div class="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-wand-magic-sparkles text-white text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Nowoczesne UI</h3>
-                    <p class="text-gray-300">Minimalistyczny, w pełni konfigurowalny interfejs.</p>
-                </div>
+                <div class="mt-8 pt-8 border-t border-white/10 text-center text-gray-400 text-sm">© 2026 VoidClient. Wszelkie prawa zastrzeżone.</div>
             </div>
-        </div>
-    </section>
-
-    <!-- Pobieranie z licznikiem i guzikiem Beta dla zalogowanego testera -->
-    <section id="download" class="py-20">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div class="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-                <h2 class="text-3xl font-bold mb-4">Pobierz VoidClient 1.0</h2>
-                <p class="text-gray-300 mb-6">Wersja stabilna 1.21.4 Fabric – instalator Windows / macOS / Linux</p>
-                
-                <!-- Standardowy przycisk pobierania (z licznikiem) -->
-                <div class="flex justify-center mb-4">
-                    <button id="standardDownloadBtn" class="bg-white text-black px-8 py-3 rounded-full font-bold text-lg hover:bg-gray-200 transition flex items-center gap-2">
-                        <i class="fas fa-download"></i> Pobierz stabilną
-                    </button>
-                </div>
-                
-                <!-- Przycisk Beta (widoczny tylko dla zalogowanego beta testera) -->
-                <div id="betaDownloadContainer" style="display: none;" class="mb-4">
-                    <button id="betaDownloadBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-full font-bold text-lg transition flex items-center gap-2 mx-auto">
-                        <i class="fas fa-flask"></i> Pobierz Beta (testerska)
-                    </button>
-                    <p class="text-xs text-purple-300 mt-2">Wersja beta dla testerów – nowe funkcje przed premierą</p>
-                </div>
-
-                <div class="inline-flex items-center gap-2 bg-black/50 px-5 py-2 rounded-full">
-                    <i class="fas fa-arrow-down text-blue-400"></i>
-                    <span>Pobrania (stabilna): <span id="downloadCounter">0</span></span>
-                </div>
-                <p class="text-gray-400 text-sm mt-4">Licznik zapamiętuje Twoje kliknięcia (localStorage).</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ -->
-    <section id="faq" class="py-20 bg-white/5">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-4xl font-bold text-center text-white mb-12">FAQ</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-black/40 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-                    <h3 class="text-lg font-bold mb-2">Na jaką wersję Minecraft działa VoidClient?</h3>
-                    <p class="text-gray-300">VoidClient 1.0 jest na wersję 1.21.4 Fabric, ale planujemy wsparcie dla 1.8 – 1.20+.</p>
-                </div>
-                <div class="bg-black/40 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-                    <h3 class="text-lg font-bold mb-2">Czy jest darmowy?</h3>
-                    <p class="text-gray-300">Tak, VoidClient jest całkowicie darmowy i open-source. Zero ukrytych opłat.</p>
-                </div>
-                <div class="bg-black/40 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-                    <h3 class="text-lg font-bold mb-2">Gdzie mogę zgłosić błąd?</h3>
-                    <p class="text-gray-300">Dołącz na naszego Discorda – link w stopce.</p>
-                </div>
-                <div class="bg-black/40 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-                    <h3 class="text-lg font-bold mb-2">Czy mogę używać własnych modów?</h3>
-                    <p class="text-gray-300">Oczywiście! VoidClient wspiera dowolne mody Fabric.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer z Discordem -->
-    <footer class="bg-black/80 backdrop-blur-md border-t border-white/10 mt-auto">
-        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div>
-                    <h3 class="text-white font-bold mb-4">VoidClient 1.0</h3>
-                    <p class="text-gray-400 text-sm">made with ❤️ by community</p>
-                </div>
-                <div>
-                    <h4 class="text-white font-semibold mb-4">Nawigacja</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#home" class="text-gray-400 hover:text-white text-sm">Home</a></li>
-                        <li><a href="#features" class="text-gray-400 hover:text-white text-sm">Funkcje</a></li>
-                        <li><a href="#download" class="text-gray-400 hover:text-white text-sm">Pobierz</a></li>
-                        <li><a href="#faq" class="text-gray-400 hover:text-white text-sm">FAQ</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-white font-semibold mb-4">Społeczność</h4>
-                    <ul class="space-y-2">
-                        <li><a href="https://dc.gg/voidclient" target="_blank" class="text-gray-400 hover:text-white text-sm flex items-center gap-2"><i class="fab fa-discord"></i> Discord</a></li>
-                        <li><a href="https://github.com/OPszyszo/VoidClient/releases" target="_blank" class="text-gray-400 hover:text-white text-sm flex items-center gap-2"><i class="fab fa-github"></i> GitHub</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-white font-semibold mb-4">Kontakt</h4>
-                    <p class="text-gray-400 text-sm">Discord: <a href="https://dc.gg/voidclient" class="hover:underline">dc.gg/voidclient</a></p>
-                </div>
-            </div>
-            <div class="mt-8 pt-8 border-t border-white/10 text-center text-gray-400 text-sm">
-                © 2026 VoidClient 1.0. Wszelkie prawa zastrzeżone.
-            </div>
-        </div>
-    </footer>
+        </footer>
+    </div>
 
     <script>
-        // ------------------------ DANE LOGOWANIA BETA TESTERA ------------------------
+        // kosmiczne tło (canvas)
+        const canvas = document.getElementById('spaceCanvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        let starCount = 400;
+        let expansionActive = false;
+        let expansionRadius = 0;
+        let expansionX = 0, expansionY = 0;
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        function initStars() { stars = []; for (let i = 0; i < starCount; i++) stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, radius: Math.random() * 2 + 1, alpha: Math.random() * 0.8 + 0.2 }); }
+        function drawStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let star of stars) { ctx.beginPath(); ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2); ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`; ctx.fill(); }
+            if (expansionActive && expansionRadius > 0) {
+                const gradient = ctx.createRadialGradient(expansionX, expansionY, 10, expansionX, expansionY, expansionRadius);
+                gradient.addColorStop(0, 'rgba(139, 92, 246, 0.9)'); gradient.addColorStop(0.5, 'rgba(107, 33, 168, 0.7)'); gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = gradient; ctx.fillRect(0, 0, canvas.width, canvas.height); ctx.globalCompositeOperation = 'source-over';
+                if (expansionRadius > Math.max(canvas.width, canvas.height) * 1.5) { expansionActive = false; expansionRadius = 0; } else { expansionRadius += 15; }
+            }
+        }
+        function animateStars() { drawStars(); requestAnimationFrame(animateStars); }
+        function startExpansion(clickX, clickY) { expansionActive = true; expansionRadius = 20; expansionX = clickX; expansionY = clickY; }
+        window.addEventListener('resize', () => { resizeCanvas(); initStars(); });
+        resizeCanvas(); initStars(); animateStars();
+
+        // LOGOWANIE BETA – UKRYTE DANE
         const BETA_EMAIL = "f4t-rat@gmail.com";
         const BETA_PASSWORD = ".beta-123";
 
-        // Elementy
-        const loginModal = document.getElementById("loginModal");
-        const loginBtn = document.getElementById("loginBtn");
-        const loginClose = document.getElementById("loginCloseBtn");
-        const loginSubmit = document.getElementById("loginSubmitBtn");
-        const authButtons = document.getElementById("authButtons");
-        const logoutContainer = document.getElementById("logoutBtnContainer");
-        const logoutBtn = document.getElementById("logoutBtn");
-        const betaContainer = document.getElementById("betaDownloadContainer");
-        const standardDownloadBtn = document.getElementById("standardDownloadBtn");
-        const betaDownloadBtn = document.getElementById("betaDownloadBtn");
+        const loginModal = document.getElementById('loginModal');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginClose = document.getElementById('loginCloseBtn');
+        const loginSubmit = document.getElementById('loginSubmitBtn');
+        const authButtons = document.getElementById('authButtons');
+        const logoutContainer = document.getElementById('logoutContainer');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const downloadBetaBtn = document.getElementById('downloadBetaBtn');
+        const betaInfo = document.getElementById('betaInfo');
 
-        // Sprawdzenie stanu logowania (czy zalogowany jako beta tester)
-        function isBetaLoggedIn() {
-            return sessionStorage.getItem("voidclient_beta_logged") === "true";
-        }
-
-        function updateUIForAuth() {
+        function isBetaLoggedIn() { return sessionStorage.getItem('voidclient_beta_logged') === 'true'; }
+        function updateBetaUI() {
             if (isBetaLoggedIn()) {
-                // Pokaż wylogowanie, ukryj przycisk logowania
-                authButtons.style.display = "none";
-                logoutContainer.style.display = "block";
-                // Pokaż przycisk pobierania beta
-                betaContainer.style.display = "block";
-                // Standardowy przycisk pobierania działa normalnie (dla stabilnej)
-                standardDownloadBtn.disabled = false;
-                standardDownloadBtn.classList.remove("bg-white/20", "text-gray-400", "cursor-not-allowed");
-                standardDownloadBtn.classList.add("bg-white", "text-black", "hover:bg-gray-200");
+                authButtons.style.display = 'none';
+                logoutContainer.style.display = 'block';
+                downloadBetaBtn.classList.remove('hidden-beta');
+                betaInfo.classList.remove('hidden-beta');
             } else {
-                authButtons.style.display = "block";
-                logoutContainer.style.display = "none";
-                betaContainer.style.display = "none";
-                standardDownloadBtn.disabled = false;
-                standardDownloadBtn.classList.remove("bg-white/20", "text-gray-400", "cursor-not-allowed");
-                standardDownloadBtn.classList.add("bg-white", "text-black", "hover:bg-gray-200");
+                authButtons.style.display = 'block';
+                logoutContainer.style.display = 'none';
+                downloadBetaBtn.classList.add('hidden-beta');
+                betaInfo.classList.add('hidden-beta');
             }
         }
-
-        function openLoginModal() {
-            loginModal.style.display = "flex";
-        }
-        function closeLoginModal() {
-            loginModal.style.display = "none";
-        }
-
+        function openLoginModal() { loginModal.style.display = 'flex'; }
+        function closeLoginModal() { loginModal.style.display = 'none'; document.getElementById('loginEmail').value = ''; document.getElementById('loginPassword').value = ''; }
         function handleLogin() {
-            const email = document.getElementById("loginEmail").value.trim();
-            const password = document.getElementById("loginPassword").value.trim();
-            if (email === BETA_EMAIL && password === BETA_PASSWORD) {
-                sessionStorage.setItem("voidclient_beta_logged", "true");
-                updateUIForAuth();
+            const email = document.getElementById('loginEmail').value.trim();
+            const pwd = document.getElementById('loginPassword').value.trim();
+            if (email === BETA_EMAIL && pwd === BETA_PASSWORD) {
+                sessionStorage.setItem('voidclient_beta_logged', 'true');
+                updateBetaUI();
                 closeLoginModal();
-                alert("Zalogowano jako beta tester! Masz dostęp do wersji Beta.");
-                // Wyczyść pola
-                document.getElementById("loginEmail").value = "";
-                document.getElementById("loginPassword").value = "";
-            } else {
-                alert("Błędny email lub hasło. Tylko beta testerzy mają dostęp.\n\nDane: f4t-rat@gmail.com / .beta-123");
-            }
+                alert('Zalogowano jako beta tester! Przycisk "Pobierz Beta" został odblokowany.');
+            } else alert('Nieprawidłowe dane logowania. Dostęp tylko dla autoryzowanych testerów.');
         }
+        function handleLogout() { sessionStorage.removeItem('voidclient_beta_logged'); updateBetaUI(); alert('Wylogowano z konta beta.'); }
+        loginBtn.addEventListener('click', openLoginModal);
+        loginClose.addEventListener('click', closeLoginModal);
+        loginSubmit.addEventListener('click', handleLogin);
+        logoutBtn.addEventListener('click', handleLogout);
+        window.addEventListener('click', (e) => { if (e.target === loginModal) closeLoginModal(); });
 
-        function handleLogout() {
-            sessionStorage.removeItem("voidclient_beta_logged");
-            updateUIForAuth();
-            alert("Wylogowano pomyślnie.");
-        }
-
-        loginBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            openLoginModal();
-        });
-        loginClose.addEventListener("click", closeLoginModal);
-        loginSubmit.addEventListener("click", handleLogin);
-        logoutBtn.addEventListener("click", handleLogout);
-
-        window.addEventListener("click", (e) => {
-            if (e.target === loginModal) closeLoginModal();
-        });
-
-        // ------------------------ LICZNIK POBRAŃ (dla stabilnej wersji) ------------------------
+        // LICZNIK POBRAŃ
         let downloadCount = 0;
-        const DOWNLOAD_KEY = "voidclient_dl_count";
-        const counterSpan = document.getElementById("downloadCounter");
-
-        function loadCounter() {
-            let stored = localStorage.getItem(DOWNLOAD_KEY);
-            if (stored !== null && !isNaN(parseInt(stored))) {
-                downloadCount = parseInt(stored);
-            } else {
-                downloadCount = 0;
-                localStorage.setItem(DOWNLOAD_KEY, downloadCount);
-            }
-            counterSpan.innerText = downloadCount;
-        }
-
-        function incrementCounter() {
-            downloadCount++;
-            localStorage.setItem(DOWNLOAD_KEY, downloadCount);
-            counterSpan.innerText = downloadCount;
-        }
-
-        // Obsługa standardowego pobierania (stabilna wersja)
-        standardDownloadBtn.addEventListener("click", (e) => {
-            e.preventDefault();
+        const DOWNLOAD_KEY = 'voidclient_dl_count';
+        const counterSpan = document.getElementById('downloadCounter');
+        function loadCounter() { let stored = localStorage.getItem(DOWNLOAD_KEY); if (stored !== null && !isNaN(parseInt(stored))) downloadCount = parseInt(stored); else { downloadCount = 0; localStorage.setItem(DOWNLOAD_KEY, downloadCount); } counterSpan.innerText = downloadCount; }
+        function incrementCounter() { downloadCount++; localStorage.setItem(DOWNLOAD_KEY, downloadCount); counterSpan.innerText = downloadCount; }
+        function handleDownloadClick(e, isBeta = false) {
+            const rect = e.currentTarget.getBoundingClientRect();
+            startExpansion(rect.left + rect.width/2, rect.top + rect.height/2);
             incrementCounter();
-            // Tutaj możesz wstawić link do pliku stabilnej wersji
-            window.open("https://download1523.mediafire.com/0jd6swy5ysagjmHzOjfNKbplWILXwy64s5KEilMWmIlobmlKtKHPguyGMbS7ashH29tuLYo8aWQ9ID6M1ZTCrB7ARED5ZFYMW0mk_tFB8LOA5syE5-eL7a5WyHRWA4o6Ryg1RixJEB5-oV3BYqAIZCRioXKuNqveZtcC3NB8OZYNEAw/izym26cg6ir2nji/Void-Setup.exe", "_blank");
-        });
-
-        // Obsługa pobierania Beta (tylko dla zalogowanych, prowadzi do youtube.com)
-        betaDownloadBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            if (!isBetaLoggedIn()) {
-                alert("Musisz być zalogowanym beta testerem, aby pobrać wersję Beta.");
-                openLoginModal();
-                return;
-            }
-            // Przekierowanie do YouTube (zgodnie z wymaganiem)
-            window.open("https://www.youtube.com", "_blank");
-            // Opcjonalnie można dodać osobny licznik dla beta, ale nie ma takiego wymogu
-        });
-
-        // ------------------------ ANIMACJA NAV (płynne przewijanie + podświetlenie) ------------------------
-        const sections = ["home", "features", "download", "faq"];
-        const navLinks = document.querySelectorAll(".nav-link");
-
-        function setActiveLink() {
-            let current = "";
-            const scrollPos = window.scrollY + 120;
-            sections.forEach(section => {
-                const el = document.getElementById(section);
-                if (el) {
-                    const offsetTop = el.offsetTop;
-                    const offsetBottom = offsetTop + el.offsetHeight;
-                    if (scrollPos >= offsetTop && scrollPos < offsetBottom) {
-                        current = section;
-                    }
-                }
-            });
-            navLinks.forEach(link => {
-                link.classList.remove("active", "bg-white/10", "text-white");
-                link.classList.add("text-gray-300");
-                const href = link.getAttribute("href").substring(1);
-                if (href === current) {
-                    link.classList.add("active", "bg-white/10", "text-white");
-                    link.classList.remove("text-gray-300");
-                }
-            });
+            if (isBeta) window.open('https://www.youtube.com', '_blank');
+            else window.open('https://download1523.mediafire.com/0jd6swy5ysagjmHzOjfNKbplWILXwy64s5KEilMWmIlobmlKtKHPguyGMbS7ashH29tuLYo8aWQ9ID6M1ZTCrB7ARED5ZFYMW0mk_tFB8LOA5syE5-eL7a5WyHRWA4o6Ryg1RixJEB5-oV3BYqAIZCRioXKuNqveZtcC3NB8OZYNEAw/izym26cg6ir2nji/Void-Setup.exe', '_blank');
         }
+        document.getElementById('downloadStableBtn').addEventListener('click', (e) => handleDownloadClick(e, false));
+        downloadBetaBtn.addEventListener('click', (e) => handleDownloadClick(e, true));
 
-        window.addEventListener("scroll", setActiveLink);
-        window.addEventListener("load", setActiveLink);
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener("click", function(e) {
-                const targetId = this.getAttribute("href");
-                if (targetId === "#" || targetId === "") return;
-                const target = document.querySelector(targetId);
-                if (target) {
-                    e.preventDefault();
-                    target.scrollIntoView({ behavior: "smooth", block: "start" });
-                    history.pushState(null, null, targetId);
-                }
-            });
-        });
-
-        // ------------------------ EFEKT TILT ------------------------
-        const tiltImg = document.querySelector(".tilt-img");
-        const tiltContainer = document.querySelector(".tilt-container");
-        if (tiltContainer && tiltImg) {
-            tiltContainer.addEventListener("mousemove", (e) => {
-                const rect = tiltContainer.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                const rotateX = ((y - centerY) / centerY) * -10;
-                const rotateY = ((x - centerX) / centerX) * 10;
-                tiltImg.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-            });
-            tiltContainer.addEventListener("mouseleave", () => {
-                tiltImg.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)";
-            });
-        }
-
-        // Inicjalizacja
-        loadCounter();
-        updateUIForAuth();
+        // nawigacja
+        const sections = ['home', 'features', 'download', 'faq'];
+        const navLinks = document.querySelectorAll('.nav-link');
+        function setActiveLink() { let current = ''; const scrollPos = window.scrollY + 120; sections.forEach(section => { const el = document.getElementById(section); if (el) { const offsetTop = el.offsetTop, offsetBottom = offsetTop + el.offsetHeight; if (scrollPos >= offsetTop && scrollPos < offsetBottom) current = section; } }); navLinks.forEach(link => { link.classList.remove('active', 'bg-white/10', 'text-white'); link.classList.add('text-gray-200'); const href = link.getAttribute('href')?.substring(1); if (href === current) { link.classList.add('active', 'bg-white/10', 'text-white'); link.classList.remove('text-gray-200'); } }); }
+        window.addEventListener('scroll', setActiveLink); window.addEventListener('load', setActiveLink);
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => { anchor.addEventListener('click', function(e) { const targetId = this.getAttribute('href'); if (targetId === '#' || targetId === '') return; const target = document.querySelector(targetId); if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); history.pushState(null, null, targetId); } }); });
+        // tilt
+        const tiltImg = document.querySelector('.tilt-img'), tiltContainer = document.querySelector('.tilt-container');
+        if (tiltContainer && tiltImg) { tiltContainer.addEventListener('mousemove', (e) => { const rect = tiltContainer.getBoundingClientRect(); const x = e.clientX - rect.left, y = e.clientY - rect.top; const centerX = rect.width/2, centerY = rect.height/2; const rotateX = ((y - centerY)/centerY) * -10, rotateY = ((x - centerX)/centerX) * 10; tiltImg.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`; }); tiltContainer.addEventListener('mouseleave', () => { tiltImg.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)'; }); }
+        loadCounter(); updateBetaUI();
     </script>
 </body>
 </html>
