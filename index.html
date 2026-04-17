@@ -63,11 +63,12 @@
             </div>
         </nav>
 
+        <!-- Modal logowania – zmienione pole email na username -->
         <div id="loginModal" class="modal">
             <div class="modal-content">
                 <h3 class="text-2xl font-bold mb-4">Logowanie do wersji beta</h3>
                 <p class="text-gray-300 mb-2">Wprowadź swoje dane dostępowe</p>
-                <input type="email" id="loginEmail" placeholder="Adres email" class="w-full p-2 rounded bg-black/50 border border-white/20 mb-3 text-white">
+                <input type="text" id="loginUsername" placeholder="Nazwa użytkownika" class="w-full p-2 rounded bg-black/50 border border-white/20 mb-3 text-white">
                 <input type="password" id="loginPassword" placeholder="Hasło" class="w-full p-2 rounded bg-black/50 border border-white/20 mb-4 text-white">
                 <div class="flex gap-3">
                     <button id="loginSubmitBtn" class="bg-purple-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-purple-700">Zaloguj się</button>
@@ -94,9 +95,9 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 class="text-4xl font-bold text-center text-white mb-16">Co wyróżnia VoidClient?</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="card"><div class="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center mb-4"><i class="fas fa-gauge-high text-white text-2xl"></i></div><h3 class="text-xl font-bold text-white mb-2">Wydajność</h3><p class="text-gray-200">Specialnie zbudowany dla FPS. Lepsza Gra</p></div>
-                    <div class="card"><div class="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center mb-4"><i class="fas fa-sliders-h text-white text-2xl"></i></div><h3 class="text-xl font-bold text-white mb-2">Wbudowane Mody</h3><p class="text-gray-200">Szlifują minecrafta oraz ulepszają grę.</p></div>
-                    <div class="card"><div class="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center mb-4"><i class="fas fa-wand-magic-sparkles text-white text-2xl"></i></div><h3 class="text-xl font-bold text-white mb-2">Personalizacja UI</h3><p class="text-gray-200">Dla Gracza zbudowany wygląd.</p></div>
+                    <div class="card"><div class="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center mb-4"><i class="fas fa-gauge-high text-white text-2xl"></i></div><h3 class="text-xl font-bold text-white mb-2">Wydajność</h3><p class="text-gray-200">Sodium, Lithium, Starlight – maksymalny FPS bez kompromisów.</p></div>
+                    <div class="card"><div class="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center mb-4"><i class="fas fa-sliders-h text-white text-2xl"></i></div><h3 class="text-xl font-bold text-white mb-2">Zaawansowane moduły</h3><p class="text-gray-200">KillAura, AutoTrap, Scaffold – dopracowane do perfekcji.</p></div>
+                    <div class="card"><div class="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center mb-4"><i class="fas fa-wand-magic-sparkles text-white text-2xl"></i></div><h3 class="text-xl font-bold text-white mb-2">Nowoczesne UI</h3><p class="text-gray-200">Minimalistyczny, w pełni konfigurowalny interfejs.</p></div>
                 </div>
             </div>
         </section>
@@ -105,13 +106,13 @@
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <div class="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
                     <h2 class="text-3xl font-bold text-white mb-4">Pobierz VoidClient</h2>
-                    <p class="text-gray-200 mb-6">Wersja 1.20.1 Fabric – Plik .jar</p>
+                    <p class="text-gray-200 mb-6">Wersja 1.21.4 Fabric – instalator Windows / macOS / Linux</p>
                     <div class="flex flex-wrap justify-center gap-4 mb-6">
                         <button id="downloadStableBtn" class="btn-stable px-8 py-3 rounded-full font-bold text-lg flex items-center gap-2"><i class="fas fa-download"></i> Pobierz wersję 1.0</button>
                         <button id="downloadBetaBtn" class="btn-beta px-8 py-3 rounded-full font-bold text-lg flex items-center gap-2 hidden-beta"><i class="fas fa-flask"></i> Pobierz Beta (YouTube)</button>
                     </div>
                     <div class="inline-flex items-center gap-2 bg-black/50 px-5 py-2 rounded-full"><i class="fas fa-arrow-down text-purple-400"></i><span class="text-white">Łączne pobrania: <span id="downloadCounter">0</span></span></div>
-                    <p class="text-gray-300 text-sm mt-4">Licznik liczy instalacje beta i release.</p>
+                    <p class="text-gray-300 text-sm mt-4">Licznik zapamiętuje wszystkie kliknięcia (wersja stabilna + beta).</p>
                     <div id="betaInfo" class="mt-4 text-purple-300 text-sm hidden-beta"><i class="fas fa-flask mr-1"></i> Witaj, testerze! Masz dostęp do wersji beta.</div>
                 </div>
             </div>
@@ -121,7 +122,7 @@
             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 class="text-4xl font-bold text-center text-white mb-12">FAQ</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-black/40 backdrop-blur-sm rounded-xl p-6 border border-white/10"><h3 class="text-lg font-bold text-white mb-2">Na jaką wersję Minecraft działa VoidClient?</h3><p class="text-gray-200"0>VoidClient działa na wersji 1.20.1 Fabric, z planami wsparcia dla 1.8 – 1.21.4+.</p></div>
+                    <div class="bg-black/40 backdrop-blur-sm rounded-xl p-6 border border-white/10"><h3 class="text-lg font-bold text-white mb-2">Na jaką wersję Minecraft działa VoidClient?</h3><p class="text-gray-200">VoidClient działa na wersji 1.21.4 Fabric, z planami wsparcia dla 1.8 – 1.20+.</p></div>
                     <div class="bg-black/40 backdrop-blur-sm rounded-xl p-6 border border-white/10"><h3 class="text-lg font-bold text-white mb-2">Czy jest darmowy?</h3><p class="text-gray-200">Tak, VoidClient jest całkowicie darmowy i open-source.</p></div>
                     <div class="bg-black/40 backdrop-blur-sm rounded-xl p-6 border border-white/10"><h3 class="text-lg font-bold text-white mb-2">Gdzie mogę zgłosić błąd?</h3><p class="text-gray-200">Dołącz na naszego Discorda – link w stopce.</p></div>
                     <div class="bg-black/40 backdrop-blur-sm rounded-xl p-6 border border-white/10"><h3 class="text-lg font-bold text-white mb-2">Czym różni się wersja beta?</h3><p class="text-gray-200">Wersja beta to przedpremierowe funkcje – dostępna tylko dla zalogowanych testerów.</p></div>
@@ -132,7 +133,7 @@
         <footer class="bg-black/80 backdrop-blur-md border-t border-white/10 mt-auto">
             <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                    <div><h3 class="text-white font-bold mb-4">VoidClient</h3><p class="text-gray-300 text-sm">made with ❤️ by SzyszoTeam</p></div>
+                    <div><h3 class="text-white font-bold mb-4">VoidClient</h3><p class="text-gray-300 text-sm">made with ❤️ by community</p></div>
                     <div><h4 class="text-white font-semibold mb-4">Nawigacja</h4><ul class="space-y-2"><li><a href="#home" class="text-gray-300 hover:text-white text-sm">Home</a></li><li><a href="#features" class="text-gray-300 hover:text-white text-sm">Funkcje</a></li><li><a href="#download" class="text-gray-300 hover:text-white text-sm">Pobierz</a></li><li><a href="#faq" class="text-gray-300 hover:text-white text-sm">FAQ</a></li></ul></div>
                     <div><h4 class="text-white font-semibold mb-4">Społeczność</h4><ul class="space-y-2"><li><a href="https://dc.gg/voidclient" target="_blank" class="text-gray-300 hover:text-white text-sm flex items-center gap-2"><i class="fab fa-discord"></i> Discord</a></li><li><a href="https://github.com/OPszyszo/VoidClient/releases" target="_blank" class="text-gray-300 hover:text-white text-sm flex items-center gap-2"><i class="fab fa-github"></i> GitHub</a></li></ul></div>
                     <div><h4 class="text-white font-semibold mb-4">Kontakt</h4><p class="text-gray-300 text-sm">Discord: <a href="https://dc.gg/voidclient" class="hover:underline">dc.gg/voidclient</a></p></div>
@@ -168,8 +169,8 @@
         window.addEventListener('resize', () => { resizeCanvas(); initStars(); });
         resizeCanvas(); initStars(); animateStars();
 
-        // LOGOWANIE BETA – UKRYTE DANE
-        const BETA_EMAIL = "f4t-rat@gmail.com";
+        // LOGOWANIE BETA – UKRYTE DANE (username: Fat2rat, hasło: .beta-123)
+        const BETA_USERNAME = "Fat2rat";
         const BETA_PASSWORD = ".beta-123";
 
         const loginModal = document.getElementById('loginModal');
@@ -197,11 +198,11 @@
             }
         }
         function openLoginModal() { loginModal.style.display = 'flex'; }
-        function closeLoginModal() { loginModal.style.display = 'none'; document.getElementById('loginEmail').value = ''; document.getElementById('loginPassword').value = ''; }
+        function closeLoginModal() { loginModal.style.display = 'none'; document.getElementById('loginUsername').value = ''; document.getElementById('loginPassword').value = ''; }
         function handleLogin() {
-            const email = document.getElementById('loginEmail').value.trim();
+            const username = document.getElementById('loginUsername').value.trim();
             const pwd = document.getElementById('loginPassword').value.trim();
-            if (email === BETA_EMAIL && pwd === BETA_PASSWORD) {
+            if (username === BETA_USERNAME && pwd === BETA_PASSWORD) {
                 sessionStorage.setItem('voidclient_beta_logged', 'true');
                 updateBetaUI();
                 closeLoginModal();
