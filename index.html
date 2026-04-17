@@ -63,7 +63,7 @@
             </div>
         </nav>
 
-        <!-- Modal logowania – zmienione pole email na username -->
+        <!-- Modal logowania – pole na nazwę użytkownika -->
         <div id="loginModal" class="modal">
             <div class="modal-content">
                 <h3 class="text-2xl font-bold mb-4">Logowanie do wersji beta</h3>
@@ -106,13 +106,13 @@
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <div class="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
                     <h2 class="text-3xl font-bold text-white mb-4">Pobierz VoidClient</h2>
-                    <p class="text-gray-200 mb-6">Wersja 1.21.4 Fabric – instalator Windows / macOS / Linux</p>
+                    <p class="text-gray-200 mb-6">Wersja stabilna - Windows 10-11</p>
                     <div class="flex flex-wrap justify-center gap-4 mb-6">
                         <button id="downloadStableBtn" class="btn-stable px-8 py-3 rounded-full font-bold text-lg flex items-center gap-2"><i class="fas fa-download"></i> Pobierz wersję 1.0</button>
                         <button id="downloadBetaBtn" class="btn-beta px-8 py-3 rounded-full font-bold text-lg flex items-center gap-2 hidden-beta"><i class="fas fa-flask"></i> Pobierz Beta (YouTube)</button>
                     </div>
                     <div class="inline-flex items-center gap-2 bg-black/50 px-5 py-2 rounded-full"><i class="fas fa-arrow-down text-purple-400"></i><span class="text-white">Łączne pobrania: <span id="downloadCounter">0</span></span></div>
-                    <p class="text-gray-300 text-sm mt-4">Licznik zapamiętuje wszystkie kliknięcia (wersja stabilna + beta).</p>
+                    <p class="text-gray-300 text-sm mt-4">Ten licznik pokazuje prawdziwe pobrania!</p>
                     <div id="betaInfo" class="mt-4 text-purple-300 text-sm hidden-beta"><i class="fas fa-flask mr-1"></i> Witaj, testerze! Masz dostęp do wersji beta.</div>
                 </div>
             </div>
@@ -133,7 +133,7 @@
         <footer class="bg-black/80 backdrop-blur-md border-t border-white/10 mt-auto">
             <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                    <div><h3 class="text-white font-bold mb-4">VoidClient</h3><p class="text-gray-300 text-sm">made with ❤️ by community</p></div>
+                    <div><h3 class="text-white font-bold mb-4">VoidClient</h3><p class="text-gray-300 text-sm">made with ❤️ by SzyszoTeam</p></div>
                     <div><h4 class="text-white font-semibold mb-4">Nawigacja</h4><ul class="space-y-2"><li><a href="#home" class="text-gray-300 hover:text-white text-sm">Home</a></li><li><a href="#features" class="text-gray-300 hover:text-white text-sm">Funkcje</a></li><li><a href="#download" class="text-gray-300 hover:text-white text-sm">Pobierz</a></li><li><a href="#faq" class="text-gray-300 hover:text-white text-sm">FAQ</a></li></ul></div>
                     <div><h4 class="text-white font-semibold mb-4">Społeczność</h4><ul class="space-y-2"><li><a href="https://dc.gg/voidclient" target="_blank" class="text-gray-300 hover:text-white text-sm flex items-center gap-2"><i class="fab fa-discord"></i> Discord</a></li><li><a href="https://github.com/OPszyszo/VoidClient/releases" target="_blank" class="text-gray-300 hover:text-white text-sm flex items-center gap-2"><i class="fab fa-github"></i> GitHub</a></li></ul></div>
                     <div><h4 class="text-white font-semibold mb-4">Kontakt</h4><p class="text-gray-300 text-sm">Discord: <a href="https://dc.gg/voidclient" class="hover:underline">dc.gg/voidclient</a></p></div>
@@ -169,9 +169,11 @@
         window.addEventListener('resize', () => { resizeCanvas(); initStars(); });
         resizeCanvas(); initStars(); animateStars();
 
-        // LOGOWANIE BETA – UKRYTE DANE (username: Fat2rat, hasło: .beta-123)
-        const BETA_USERNAME = "Fat2rat";
-        const BETA_PASSWORD = ".beta-123";
+        // LOGOWANIE BETA – DWA KONTA
+        const validCredentials = [
+            { username: "Fat2rat", password: ".beta-123" },
+            { username: "1xIdTester", password: "ANEFOUIEGBOWIEBIBoipboiswegbiwerbvpiaqbiwbeqbgpiqe" }
+        ];
 
         const loginModal = document.getElementById('loginModal');
         const loginBtn = document.getElementById('loginBtn');
@@ -202,7 +204,8 @@
         function handleLogin() {
             const username = document.getElementById('loginUsername').value.trim();
             const pwd = document.getElementById('loginPassword').value.trim();
-            if (username === BETA_USERNAME && pwd === BETA_PASSWORD) {
+            const isValid = validCredentials.some(cred => cred.username === username && cred.password === pwd);
+            if (isValid) {
                 sessionStorage.setItem('voidclient_beta_logged', 'true');
                 updateBetaUI();
                 closeLoginModal();
