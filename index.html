@@ -79,7 +79,7 @@
 
         <header id="home" class="pt-32 pb-20 relative">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <div class="inline-flex items-center px-4 py-2 rounded-full border border-white/20 bg-white/5 text-sm text-gray-200 mb-6">✨ VoidClient 2026.1 – gotowy do startu</div>
+                <div class="inline-flex items-center px-4 py-2 rounded-full border border-white/20 bg-white/5 text-sm text-gray-200 mb-6">🚀 VoidClient 2026.2 – Gra Wzywa!</div>
                 <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-6">VoidClient<span class="block text-gray-200 font-semibold text-2xl md:text-3xl mt-3">Wydajność. Stabilność. Kosmiczna moc.</span></h1>
                 <p class="text-xl text-gray-200 mb-10 max-w-3xl mx-auto">Odchudzony launcher, zaawansowane moduły i niespotykana optymalizacja.</p>
                 <div class="flex flex-col sm:flex-row justify-center gap-4">
@@ -108,7 +108,7 @@
                     <h2 class="text-3xl font-bold text-white mb-4">Pobierz VoidClient</h2>
                     <p class="text-gray-200 mb-6">Wersja stabilna - Windows 10-11</p>
                     <div class="flex flex-wrap justify-center gap-4 mb-6">
-                        <button id="downloadStableBtn" class="btn-stable px-8 py-3 rounded-full font-bold text-lg flex items-center gap-2"><i class="fas fa-download"></i> Pobierz wersję 2026.1</button>
+                        <button id="downloadStableBtn" class="btn-stable px-8 py-3 rounded-full font-bold text-lg flex items-center gap-2"><i class="fas fa-download"></i> Pobierz wersję 2026.2</button>
                         <button id="downloadBetaBtn" class="btn-beta px-8 py-3 rounded-full font-bold text-lg flex items-center gap-2 hidden-beta"><i class="fas fa-flask"></i> Pobierz Beta</button>
                     </div>
                     <div class="inline-flex items-center gap-2 bg-black/50 px-5 py-2 rounded-full"><i class="fas fa-arrow-down text-purple-400"></i><span class="text-white">Łączne pobrania: <span id="downloadCounter">0</span></span></div>
@@ -230,7 +230,7 @@
             startExpansion(rect.left + rect.width/2, rect.top + rect.height/2);
             incrementCounter();
             if (isBeta) window.open('https://github.com/OPszyszo/VoidClient/releases/download/Pre-Release/Void-Setup.exe', '_blank');
-            else window.open('https://github.com/OPszyszo/VoidClient/releases/download/Release/VoidClient-setup.exe', '_blank');
+            else window.open('https://github.com/OPszyszo/VoidClient/releases/download/2026.2/void-setup.exe', '_blank');
         }
         document.getElementById('downloadStableBtn').addEventListener('click', (e) => handleDownloadClick(e, false));
         downloadBetaBtn.addEventListener('click', (e) => handleDownloadClick(e, true));
